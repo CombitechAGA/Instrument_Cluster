@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/mainBackground"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:background="#EFEFEF"
+        />
+
+    <!--Menu Icon-->
+    <ImageView
+        android:id="@+id/menuIcon"
+        android:layout_width="60px"
+        android:layout_height="50px"
+        android:layout_marginTop="40px"
+        android:layout_marginLeft="40px"
+        android:background="@drawable/aga_zbee_menu_icon"
+        />
+
+    <!--Message-->
+    <ImageView
+        android:id="@+id/messageIcon"
+        android:layout_width="100px"
+        android:layout_height="100px"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="40px"
+        />
+
+    <!--Footer-->
+    <ImageView
+        android:id="@+id/footerApp"
+        android:layout_width="1920px"
+        android:layout_height="190px"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/aga_zbee_footer_background"
+        />
+
+    <!--Cluster Container-->
+    <RelativeLayout
+        android:id="@+id/clusterContainer"
+        android:layout_width="916px"
+        android:layout_height="916px"
+        android:layout_marginTop="40px"
+        android:layout_centerHorizontal="true">
+        
+        <ImageView
+            android:id="@+id/innerCircle"
+            android:layout_width="916px"
+            android:layout_height="916px"
+            android:background="@drawable/aga_zbee_inner_circle_range" />
+
+        <ImageView
+            android:id="@+id/outerCircle"
+            android:layout_width="916px"
+            android:layout_height="916px"
+            />
+
+        <!--Battery-->
+        <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="400px"
+        android:layout_centerVertical="true">
+
+        <ImageView
+            android:id="@+id/heartIcon"
+            android:layout_width="66px"
+            android:layout_height="58px"
+            android:background="@drawable/aga_zbee_heart"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="80px"
+            android:alpha="0.5"/>
+
+        <ImageView
+            android:id="@+id/plugIcon"
+            android:layout_width="102px"
+            android:layout_height="54px"
+            android:background="@drawable/aga_zbee_plug"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="60px"
+            android:alpha="0.5"/>
+
+
+        <ImageView
+            android:id="@+id/batteryBackground"
+            android:layout_width="98px"
+            android:layout_height="212px"
+            android:background="@drawable/aga_zbee_battery_background"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="75px"
+            android:layout_marginRight="60px" />
+
+
+            <ProgressBar
+                android:id="@+id/batteryProgressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_height="86px"
+                android:layout_width="188px"
+                android:progress="100"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15px"
+                android:layout_alignBottom="@+id/batteryBackground"
+                android:layout_marginBottom="57px"
+                android:rotation="-90"
+                android:progressDrawable="@drawable/battery_progress_bar_blue"
+                />
+
+        <TextView
+            android:id="@+id/percentageBattery"
+            android:layout_width="wrap_content"
+            android:layout_height="50px"
+            android:text="100%"
+            android:textSize="40px"
+            android:textColor="#000000"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/batteryBackground"
+            android:layout_marginRight="60px"
+            android:layout_marginTop="1px"
+            android:layout_alignParentEnd="true" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/speedNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="440px"
+            android:text="0"
+            android:textSize="400px"
+            android:textColor="#000000"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="110px"
+            />
+
+        <TextView
+            android:id="@+id/speedValue"
+            android:layout_width="470px"
+            android:layout_height="90px"
+            android:text="km / h"
+            android:textSize="80px"
+            android:textColor="#000000"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/speedNumber"
+            />
+
+        <TextView
+            android:id="@+id/tripMeter"
+            android:layout_width="470px"
+            android:layout_height="70px"
+            android:text="Trip: 234.4"
+            android:textSize="48px"
+            android:textColor="#999999"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/speedValue"
+            />
+
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>
