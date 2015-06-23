@@ -9,7 +9,7 @@ import java.io.IOException;
 /**
  * Created by Erik on 2014-10-07.
  */
-//Folke
+//Folke och Thomas
 
 public class SAFEClientRunnable implements Runnable {
     private final SAFEDataModel sAFEDataModel;
