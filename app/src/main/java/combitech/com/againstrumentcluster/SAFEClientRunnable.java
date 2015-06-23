@@ -30,30 +30,31 @@ public class SAFEClientRunnable implements Runnable {
 
     @Override
     public void run() {
-        try {
-            currentTime = System.currentTimeMillis();
-            client.loginAndGetSessionId(SAFEDataModel.SERVER_ADRESS + "/safe/api/sessions");
-            while (isRunning) {
-                updateTime();
-                if ((elapsedTime % 2) == 0) {
-                    client.updateMissionList(SAFEDataModel.SERVER_ADRESS + "/safe/api/issues/10/children");
-                    sAFEDataModel.setCurrentMission(client.clientData.getMissionList());
-                }
-                if ((elapsedTime % 300) == 0) {
-                    client.loginAndGetSessionId(SAFEDataModel.SERVER_ADRESS + "/safe/api/sessions");
-                }
-                if ((elapsedTime % 2) == 0) {
-                    client.clientData.setLatitude(vehicleDataModel.getLatitude());
-                    client.clientData.setLongitude(vehicleDataModel.getLongitude());
-                    client.sendPosition(SAFEDataModel.SERVER_ADRESS + "/safe/api/issues/", 10, "/position?doNotUpdateIssueLog=true");
-                }
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                }
-            }
-        } catch (IOException e) {
-        }
+        return;
+//        try {
+//            currentTime = System.currentTimeMillis();
+//            client.loginAndGetSessionId(SAFEDataModel.SERVER_ADRESS + "/safe/api/sessions");
+//            while (isRunning) {
+//                updateTime();
+//                if ((elapsedTime % 2) == 0) {
+//                    client.updateMissionList(SAFEDataModel.SERVER_ADRESS + "/safe/api/issues/10/children");
+//                    sAFEDataModel.setCurrentMission(client.clientData.getMissionList());
+//                }
+//                if ((elapsedTime % 300) == 0) {
+//                    client.loginAndGetSessionId(SAFEDataModel.SERVER_ADRESS + "/safe/api/sessions");
+//                }
+//                if ((elapsedTime % 2) == 0) {
+//                    client.clientData.setLatitude(vehicleDataModel.getLatitude());
+//                    client.clientData.setLongitude(vehicleDataModel.getLongitude());
+//                    client.sendPosition(SAFEDataModel.SERVER_ADRESS + "/safe/api/issues/", 10, "/position?doNotUpdateIssueLog=true");
+//                }
+//                try {
+//                    Thread.sleep(100);
+//                } catch (InterruptedException e) {
+//                }
+//            }
+//        } catch (IOException e) {
+//        }
     }
 
     private void updateTime() {

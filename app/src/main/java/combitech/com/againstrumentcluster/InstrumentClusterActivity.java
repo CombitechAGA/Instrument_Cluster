@@ -29,65 +29,68 @@ public class InstrumentClusterActivity extends Activity {
         super.onCreate(savedInstanceState);
         SAFEClientRunnable updateRunnable = new SAFEClientRunnable(safeClient, safeDataModel, vehicleDataModel);
         new Thread(updateRunnable).start();
+        final CloudPutter mqtt = new MQTT(this);
 
         // Ändra layout här
         //final ActivityLayoutManager layoutManager = new ActivityLayoutManager(this, vehicleDataModel, safeDataModel, safeClient);
         final ActivityLayoutManager_v2 layoutManager = new ActivityLayoutManager_v2(this, vehicleDataModel, safeDataModel, safeClient);
-
         manager = (AutomotiveManager) getApplicationContext().getSystemService(Context.AUTOMOTIVE_SERVICE);
-    manager.setListener(new AutomotiveListener() {
-        @Override
-        public void receive(AutomotiveSignal automotiveSignal) {
-            //Log.e("REC", "Received :" + automotiveSignal.getSignalId() + " Value " + ((SCSFloat) automotiveSignal.getData()).getFloatValue());
-            if (automotiveSignal.getSignalId() == AutomotiveSignalId.FMS_WHEEL_BASED_SPEED) {
-                final SCSFloat data = (SCSFloat) automotiveSignal.getData();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        vehicleDataModel.setVehicleSpeed(data.getFloatValue());
-                        layoutManager.updateSpeed();
-                    }
-                });
-            } else if (automotiveSignal.getSignalId() == AutomotiveSignalId.FMS_FUEL_LEVEL_1) {
-                final SCSFloat data = (SCSFloat) automotiveSignal.getData();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        vehicleDataModel.setBatteryLevel(data.getFloatValue());
-                        layoutManager.updateBattery();
-                        layoutManager.updateRange();
-                    }
-                });
-            } else if(automotiveSignal.getSignalId() == AutomotiveSignalId.FMS_HIGH_RESOLUTION_TOTAL_VEHICLE_DISTANCE){
-                final SCSLong data = (SCSLong) automotiveSignal.getData();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        vehicleDataModel.setOdometer(data.getLongValue());
-                        layoutManager.updateOdometer();
-                    }
-                });
+        manager.setListener(new AutomotiveListener() {
+            @Override
+            public void receive(AutomotiveSignal automotiveSignal) {
+                //Log.e("REC", "Received :" + automotiveSignal.getSignalId() + " Value " + ((SCSFloat) automotiveSignal.getData()).getFloatValue());
+                if (automotiveSignal.getSignalId() == AutomotiveSignalId.FMS_WHEEL_BASED_SPEED) {
+                    final SCSFloat data = (SCSFloat) automotiveSignal.getData();
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            vehicleDataModel.setVehicleSpeed(data.getFloatValue());
+                            layoutManager.updateSpeed();
+                        }
+                    });
+                    mqtt.updateSpeed(data.getFloatValue());
+
+                } else if (automotiveSignal.getSignalId() == AutomotiveSignalId.FMS_FUEL_LEVEL_1) {
+                    final SCSFloat data = (SCSFloat) automotiveSignal.getData();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            vehicleDataModel.setBatteryLevel(data.getFloatValue());
+                            layoutManager.updateBattery();
+                            layoutManager.updateRange();
+                        }
+                    });
+                } else if (automotiveSignal.getSignalId() == AutomotiveSignalId.FMS_HIGH_RESOLUTION_TOTAL_VEHICLE_DISTANCE) {
+                    final SCSLong data = (SCSLong) automotiveSignal.getData();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            vehicleDataModel.setOdometer(data.getLongValue());
+                            layoutManager.updateOdometer();
+                        }
+                    });
+                }
             }
-        }
 
-        @Override
-        public void timeout(int i) {
-        }
+            @Override
+            public void timeout(int i) {
+            }
 
-        @Override
-        public void notAllowed(int i) {
-        }
-    });
-    new Thread(new Runnable() {
-        @Override
-        public void run() {
-            manager.register(AutomotiveSignalId.FMS_WHEEL_BASED_SPEED);
-            manager.register(AutomotiveSignalId.FMS_FUEL_LEVEL_1);
-            manager.register(AutomotiveSignalId.FMS_FUEL_RATE);
-            manager.register(AutomotiveSignalId.FMS_HIGH_RESOLUTION_TOTAL_VEHICLE_DISTANCE);
-        }
-    }).start();
-}
+            @Override
+            public void notAllowed(int i) {
+            }
+        });
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                manager.register(AutomotiveSignalId.FMS_WHEEL_BASED_SPEED);
+                manager.register(AutomotiveSignalId.FMS_FUEL_LEVEL_1);
+                manager.register(AutomotiveSignalId.FMS_FUEL_RATE);
+                manager.register(AutomotiveSignalId.FMS_HIGH_RESOLUTION_TOTAL_VEHICLE_DISTANCE);
+            }
+        }).start();
+    }
 
     @Override
     protected void onDestroy() {

@@ -3,6 +3,10 @@ package combitech.com.againstrumentcluster;
 /**
  * Created by Erik on 2014-10-07.
  */
+
+//borde vara synkroniserade metoder
+
+
 public class VehicleDataModel {
     private float vehicleSpeed = 45f;
     private float batteryLevel = 0.80f;
