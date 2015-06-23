@@ -9,6 +9,8 @@ import java.io.IOException;
 /**
  * Created by Erik on 2014-10-07.
  */
+//Folke
+
 public class SAFEClientRunnable implements Runnable {
     private final SAFEDataModel sAFEDataModel;
     private final VehicleDataModel vehicleDataModel;
