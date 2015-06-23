@@ -30,6 +30,7 @@ public class InstrumentClusterActivity extends Activity {
         SAFEClientRunnable updateRunnable = new SAFEClientRunnable(safeClient, safeDataModel, vehicleDataModel);
         new Thread(updateRunnable).start();
         final CloudPutter mqtt = new MQTT(this);
+        mqtt.createConnection();
 
         // Ändra layout här
         //final ActivityLayoutManager layoutManager = new ActivityLayoutManager(this, vehicleDataModel, safeDataModel, safeClient);
