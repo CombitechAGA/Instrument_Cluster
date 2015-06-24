@@ -11,7 +11,7 @@ public interface CloudPutter {
 
     public void updateSpeed(float speed);
 
-    public void updateBattery(float percent);
+    public void updateBatteryLevel(float percent);
 
-    public void updateRange(long range);
+    public void updateDistanceTraveled(long distance);
 }

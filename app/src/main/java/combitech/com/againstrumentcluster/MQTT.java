@@ -56,12 +56,26 @@ public class MQTT implements CloudPutter {
     }
 
     @Override
-    public void updateBattery(float percent) {
-
+    public void updateBatteryLevel(float percent) {
+        String topic = "telemetry/fuel";
+        String message = "" + percent;
+        try {
+            client.publish(topic,message.getBytes(),0,false);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void updateRange(long range) {
+    public void updateDistanceTraveled(long distance) {
+        String topic = "telemetry/distanceTraveled";
+        String message = "" + distance;
+        try {
+            client.publish(topic,message.getBytes(),0,false);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+
 
     }
 }

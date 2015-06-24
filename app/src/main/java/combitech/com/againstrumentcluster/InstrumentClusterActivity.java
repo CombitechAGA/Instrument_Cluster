@@ -75,6 +75,7 @@ public class InstrumentClusterActivity extends Activity {
                             layoutManager.updateRange();
                         }
                     });
+                    cloudPutter.updateBatteryLevel(data.getFloatValue());
                 } else if (automotiveSignal.getSignalId() == AutomotiveSignalId.FMS_HIGH_RESOLUTION_TOTAL_VEHICLE_DISTANCE) {
                     final SCSLong data = (SCSLong) automotiveSignal.getData();
                     runOnUiThread(new Runnable() {
@@ -84,6 +85,7 @@ public class InstrumentClusterActivity extends Activity {
                             layoutManager.updateOdometer();
                         }
                     });
+                    cloudPutter.updateDistanceTraveled(data.getLongValue());
                 }
             }
 
