@@ -17,6 +17,11 @@ import android.widget.TextView;
 import com.combitech.safe.SAFEClient;
 import com.swedspot.automotiveapi.AutomotiveListener;
 
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+
 public class InstrumentClusterActivity extends Activity {
 
     private static AutomotiveManager manager;
@@ -29,8 +34,16 @@ public class InstrumentClusterActivity extends Activity {
         super.onCreate(savedInstanceState);
         SAFEClientRunnable updateRunnable = new SAFEClientRunnable(safeClient, safeDataModel, vehicleDataModel);
         new Thread(updateRunnable).start();
-        final CloudPutter mqtt = new MQTT(this);
-        mqtt.createConnection();
+        final CloudPutter cloudPutter = new MQTT();
+        cloudPutter.readConfig();
+        cloudPutter.createConnection();
+
+
+
+
+        //lyssnare till mqtt:n och mqttn kastar upp event när saker händer.
+        //observer pattern
+
 
         // Ändra layout här
         //final ActivityLayoutManager layoutManager = new ActivityLayoutManager(this, vehicleDataModel, safeDataModel, safeClient);
@@ -50,7 +63,7 @@ public class InstrumentClusterActivity extends Activity {
                             layoutManager.updateSpeed();
                         }
                     });
-                    mqtt.updateSpeed(data.getFloatValue());
+                    cloudPutter.updateSpeed(data.getFloatValue());
 
                 } else if (automotiveSignal.getSignalId() == AutomotiveSignalId.FMS_FUEL_LEVEL_1) {
                     final SCSFloat data = (SCSFloat) automotiveSignal.getData();
