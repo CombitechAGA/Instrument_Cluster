@@ -1,0 +1,6 @@
+Broker: "tcp://ip:port"
+ClientID:
+SubTopics: "subscribe to?"
+PubTopics: "publish what?"
+DeviceID: MAC-addres?
+

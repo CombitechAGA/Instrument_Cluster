@@ -15,6 +15,7 @@ public class MQTT implements CloudPutter {
 
     private static String IP = "tcp://mqtt.phelicks.net:1883";
     //private static String IP = "tcp://81.236.122.249:1883";
+
     //Från bilen, hur?
     private static String clientID = "carID";
 
