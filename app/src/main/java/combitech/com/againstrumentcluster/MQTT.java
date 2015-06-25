@@ -13,8 +13,8 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
  */
 public class MQTT implements CloudPutter {
 
-    private static String IP = "tcp://81.236.122.249:1883";
-
+    private static String IP = "tcp://mqtt.phelicks.net:1883";
+    //private static String IP = "tcp://81.236.122.249:1883";
     //Från bilen, hur?
     private static String clientID = "carID";
 
@@ -29,13 +29,18 @@ public class MQTT implements CloudPutter {
     @Override
     public void readConfig() {
 
+        //för att läsa in ip, qos, topics osv.
+
     }
 
     @Override
     public void createConnection() {
         try {
             client = new MqttClient(IP, clientID, new MemoryPersistence());
-            client.connect();
+            MqttConnectOptions options = new MqttConnectOptions();
+            options.setUserName("cab");
+            options.setPassword("sjuttongubbar".toCharArray());
+            client.connect(options);
 
         } catch (MqttException e) {
             e.printStackTrace();
