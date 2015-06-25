@@ -7,11 +7,13 @@ public interface CloudPutter {
 
     public void readConfig();
 
-    public void createConnection();
+    public boolean createConnection();
 
-    public void updateSpeed(float speed);
+    public void publishSpeed(float speed);
 
-    public void updateBatteryLevel(float percent);
+    public void publishBatteryLevel(float percent);
 
-    public void updateDistanceTraveled(long distance);
+    public void publishDistanceTraveled(long distance);
+
+    public void start();
 }

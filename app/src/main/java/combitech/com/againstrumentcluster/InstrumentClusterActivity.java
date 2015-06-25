@@ -34,9 +34,11 @@ public class InstrumentClusterActivity extends Activity {
         super.onCreate(savedInstanceState);
         SAFEClientRunnable updateRunnable = new SAFEClientRunnable(safeClient, safeDataModel, vehicleDataModel);
         new Thread(updateRunnable).start();
-        final CloudPutter cloudPutter = new MQTT();
-        cloudPutter.readConfig();
-        cloudPutter.createConnection();
+        final Monitor monitor = new Monitor();
+
+        final CloudPutter cloudPutter = new MQTT(monitor);
+        cloudPutter.start();
+
 
 
 
@@ -63,7 +65,8 @@ public class InstrumentClusterActivity extends Activity {
                             layoutManager.updateSpeed();
                         }
                     });
-                    cloudPutter.updateSpeed(data.getFloatValue());
+                  //  cloudPutter.publishSpeed(data.getFloatValue());
+                    monitor.updateSpeed(data.getFloatValue());
 
                 } else if (automotiveSignal.getSignalId() == AutomotiveSignalId.FMS_FUEL_LEVEL_1) {
                     final SCSFloat data = (SCSFloat) automotiveSignal.getData();
@@ -75,7 +78,8 @@ public class InstrumentClusterActivity extends Activity {
                             layoutManager.updateRange();
                         }
                     });
-                    cloudPutter.updateBatteryLevel(data.getFloatValue());
+                 //   cloudPutter.publishBatteryLevel(data.getFloatValue());
+                    monitor.updateFuel(data.getFloatValue());
                 } else if (automotiveSignal.getSignalId() == AutomotiveSignalId.FMS_HIGH_RESOLUTION_TOTAL_VEHICLE_DISTANCE) {
                     final SCSLong data = (SCSLong) automotiveSignal.getData();
                     runOnUiThread(new Runnable() {
@@ -85,7 +89,8 @@ public class InstrumentClusterActivity extends Activity {
                             layoutManager.updateOdometer();
                         }
                     });
-                    cloudPutter.updateDistanceTraveled(data.getLongValue());
+                    monitor.updatedistanceTraveled(data.getLongValue());
+                    //cloudPutter.publishDistanceTraveled(data.getLongValue());
                 }
             }
 
@@ -106,6 +111,7 @@ public class InstrumentClusterActivity extends Activity {
                 manager.register(AutomotiveSignalId.FMS_HIGH_RESOLUTION_TOTAL_VEHICLE_DISTANCE);
             }
         }).start();
+
     }
 
     @Override
