@@ -16,8 +16,8 @@ public class MQTT extends Thread implements CloudPutter {
     private final static int DISTANCE_TRAVELED = 3;
 
 
-    private static String IP = "tcp://mqtt.phelicks.net:1883";
-    //private static String IP = "tcp://81.236.122.249:1883";
+    // private static String IP = "tcp://mqtt.phelicks.net:1883";
+    private static String IP = "tcp://81.236.122.249:1883";
 
     //Från bilen, hur?
     private static String clientID = "carID";
@@ -46,36 +46,41 @@ public class MQTT extends Thread implements CloudPutter {
             System.out.println("mqttn kör--------------------------------------");
             monitor.waitForCloudConnectionAllowance();
             boolean connected = createConnection();
+            System.out.println("Connection: " + connected);
             monitor.notifyCloudConnectionResult(connected);
             while (connected) {
 
-               int type = monitor.dataUpdated();
+                int type = monitor.dataUpdated();
+                if (monitor.manualDisconnect()) {
+                    connected = false;
+                    monitor.disconnectedFromCloud();
+                    break;
+                }
 
 
-
-
-                boolean publishResult=false;
+                boolean publishResult = false;
                 switch (type) {
                     case SPEED:
-                       float speed = monitor.getSpeed();
+                        float speed = monitor.getSpeed();
                         //float speed = 5.0f;
                         publishResult = publishSpeed(speed);
                         break;
                     case FUEL:
                         float fuel = monitor.getFuel();
-                        publishResult=publishBatteryLevel(fuel);
+                        publishResult = publishBatteryLevel(fuel);
                         break;
                     case DISTANCE_TRAVELED:
                         long distanceTraveled = monitor.getDistanceTraveled();
-                        publishResult=publishDistanceTraveled(distanceTraveled);
+                        publishResult = publishDistanceTraveled(distanceTraveled);
                         break;
                     default:
                         System.err.println("unknown datatype");
                         System.exit(1);
 
                 }
-                if(!publishResult){
-                    connected=false;
+                if (!publishResult) {
+                    connected = false;
+                    monitor.disconnectedFromCloud();
                 }
 
             }
@@ -101,6 +106,7 @@ public class MQTT extends Thread implements CloudPutter {
             options.setUserName("cab");
             options.setPassword("sjuttongubbar".toCharArray());
             client.connect(options);
+
             return true;
 
 

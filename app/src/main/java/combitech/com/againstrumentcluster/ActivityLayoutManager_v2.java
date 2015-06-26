@@ -40,6 +40,7 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
     private ImageView telltaleHazard;
     private ImageView telltaleDefroster;
     private ImageView telltaleBlinkers;
+    private ImageView connectionButton;
 
     private Button acceptButton;
     private Button cancelButton;
@@ -69,13 +70,15 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
     private VehicleDataModel vehicleDataModel;
     private SAFEDataModel safeDataModel;
     private SAFEClient safeClient;
+    private Monitor monitor;
 
-    public ActivityLayoutManager_v2(final InstrumentClusterActivity activity, final VehicleDataModel vehicleDataModel, final SAFEDataModel safeDataModel, final SAFEClient safeClient) {
+    public ActivityLayoutManager_v2(final InstrumentClusterActivity activity, final VehicleDataModel vehicleDataModel, final SAFEDataModel safeDataModel, final SAFEClient safeClient,Monitor monitor) {
         super(activity);
         this.activity = activity;
         this.vehicleDataModel = vehicleDataModel;
         this.safeDataModel = safeDataModel;
         this.safeClient = safeClient;
+        this.monitor=monitor;
 
         leftBlinkersTimer = new Timer(new Runnable() {
             @Override
@@ -203,7 +206,22 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
             ImageView connectionButton = (ImageView) activity.findViewById(R.id.connectionButton);
             connectionButton.setImageResource(R.drawable.aga_zbee_v2_button_connection_on);
         }
+        connectionButton = (ImageView) activity.findViewById(R.id.connectionButton);
+        connectionButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View view) {
+                System.out.println("nu klickade du");
+                if(connected){
+                    System.out.println("nu vill jag att du disconnectar");
+                    connectionButton.setImageResource(R.drawable.aga_zbee_v2_button_connection_off);
+                    monitor.doManualDisconnect();
+                }
+                else{
+                    System.out.println("nu vill jag att du connectar");
+                    monitor.doManualConnect();
+                }
 
+            }
+        });
     }
 
     public void setupViewMessage() {
@@ -616,7 +634,7 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
 
     public void setConnectionStatus(boolean status) {
         connected = status;
-        ImageView connectionButton = (ImageView) activity.findViewById(R.id.connectionButton);
+       // ImageView connectionButton = (ImageView) activity.findViewById(R.id.connectionButton);
         //borde kanske göras på något annat sätt
         if(connectionButton!=null) {
             if (connected) {

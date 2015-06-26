@@ -51,7 +51,7 @@ public class InstrumentClusterActivity extends Activity {
 
         // Ändra layout här
         //final ActivityLayoutManager layoutManager = new ActivityLayoutManager(this, vehicleDataModel, safeDataModel, safeClient);
-        final ActivityLayoutManager_v2 layoutManager = new ActivityLayoutManager_v2(this, vehicleDataModel, safeDataModel, safeClient);
+        final ActivityLayoutManager_v2 layoutManager = new ActivityLayoutManager_v2(this, vehicleDataModel, safeDataModel, safeClient,monitor);
         ConnectionStatusThread connectionStatusThread= new ConnectionStatusThread(monitor,layoutManager,this);
         connectionStatusThread.start();
 

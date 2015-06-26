@@ -11,6 +11,13 @@ public class Monitor {
     private final static int DISTANCE_TRAVELED = 3;
 
 
+    private final static int NETWORK_CONNECTION_ON = 1;
+    private final static int NETWORK_CONNECTION_OFF = 2;
+    private final static int CLOUD_CONNECTION_LOST = 3;
+    private final static int MANUAL_CONNECTION_ATTEMPT = 4;
+
+
+
     private float speed;
     private float fuel;
     private long distanceTraveled;
@@ -21,11 +28,17 @@ public class Monitor {
 
 
     private boolean connectedToCloud=false;
+
+
+    private boolean manualDisconnectRequest=false;
+
+
     private boolean allowedToConnectToCloud = false;
     private boolean connectionAttemptFinished = false;
     private boolean networkedChanged = false;
-    private boolean networkOnline=false;
 
+
+    private int lastNetworkChange;
 
     public Monitor() {
     }
@@ -83,35 +96,22 @@ public class Monitor {
     }
 
 
-//    public synchronized void connected() {
-//        online=true;
-//        notifyAll();
-//    }
-//
-//    public synchronized void waitUntilOnline() {
-//        while(!online){
-//            try {
-//                wait();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+
 
     public synchronized void networkOnline() {
         networkedChanged = true;
-        networkOnline = true;
+        lastNetworkChange = NETWORK_CONNECTION_ON;
         notifyAll();
     }
 
     public synchronized void networkOffline() {
         networkedChanged = true;
-        networkOnline = false;
+        lastNetworkChange = NETWORK_CONNECTION_OFF;
         notifyAll();
 
     }
 
-    public synchronized boolean waitForNetworkChange() {
+    public synchronized void waitForNetworkChange() {
         while(!networkedChanged){
             try {
                 wait();
@@ -120,7 +120,6 @@ public class Monitor {
             }
         }
         networkedChanged=false;
-        return networkOnline;
     }
 
     public synchronized void notifyCloudConnection() {
@@ -164,6 +163,33 @@ public class Monitor {
     }
 
     public synchronized void disconnectedFromCloud() {
+        networkedChanged=true;
         connectedToCloud=false;
+        lastNetworkChange = CLOUD_CONNECTION_LOST;
+        notifyAll();
+    }
+
+    public synchronized int getNetworkChange() {
+        return lastNetworkChange;
+    }
+
+    public synchronized void doManualDisconnect(){
+        manualDisconnectRequest=true;
+        notifyAll();
+    }
+
+    public synchronized boolean manualDisconnect() {
+        boolean temp = manualDisconnectRequest;
+        if(manualDisconnectRequest){
+            manualDisconnectRequest=false;
+        }
+        return temp;
+
+    }
+
+    public synchronized void doManualConnect() {
+        networkedChanged=true;
+        lastNetworkChange = MANUAL_CONNECTION_ATTEMPT;
+        notifyAll();
     }
 }
