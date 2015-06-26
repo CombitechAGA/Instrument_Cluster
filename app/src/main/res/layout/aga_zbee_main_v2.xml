@@ -278,10 +278,10 @@
 
         <ImageView
             android:id = "@+id/connectionButton"
-            android:layout_width="210px"
-            android:layout_height="210px"
+            android:layout_width="110px"
+            android:layout_height="110px"
             android:background="@drawable/aga_zbee_v2_button_connection_off"
-            android:layout_alignBottom="@+id/tripMeter"
+            android:layout_alignParentTop="true"
             android:layout_alignParentStart="true" />
 
 
