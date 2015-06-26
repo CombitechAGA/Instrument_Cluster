@@ -62,6 +62,8 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
     private boolean isDefrosting;
     private boolean isHazard;
 
+    private boolean connected = false;
+
     private InstrumentClusterActivity activity;
 
     private VehicleDataModel vehicleDataModel;
@@ -165,6 +167,7 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
     }
 
     public void setupViewNormal() {
+        System.out.println("Nu visar jag normala vyn");
         activity.setContentView(R.layout.aga_zbee_main_v2);
         isMessageView = false;
         batteryPercentage = (TextView) activity.findViewById(R.id.percentageBattery);
@@ -195,6 +198,11 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
         updateBattery();
         updateRange();
         updateOdometer();
+
+        if (connected){
+            ImageView connectionButton = (ImageView) activity.findViewById(R.id.connectionButton);
+            connectionButton.setImageResource(R.drawable.aga_zbee_v2_button_connection_on);
+        }
 
     }
 
@@ -419,7 +427,7 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
                 setBlinkingRight(false);
                 leftBlinkersTimer.stop();
                 rightBlinkersTimer.stop();
-
+                System.out.println("Is hazard: "+isHazard);
                 if (isHazard()) {
                     setBlinkingRightOn(true);
                     setBlinkingLeftOn(true);
@@ -604,5 +612,18 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
             telltaleHazard.setAlpha(0.0f);
         }
 
+    }
+
+    public void setConnectionStatus(boolean status) {
+        connected = status;
+        ImageView connectionButton = (ImageView) activity.findViewById(R.id.connectionButton);
+        //borde kanske göras på något annat sätt
+        if(connectionButton!=null) {
+            if (status) {
+                connectionButton.setImageResource(R.drawable.aga_zbee_v2_button_connection_on);
+            } else {
+                connectionButton.setImageResource(R.drawable.aga_zbee_v2_button_connection_off);
+            }
+        }
     }
 }

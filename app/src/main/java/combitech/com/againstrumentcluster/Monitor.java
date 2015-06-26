@@ -19,6 +19,14 @@ public class Monitor {
     private boolean fuelUpdated = false;
     private boolean distanceTraveledUpdated = false;
 
+
+    private boolean connectedToCloud=false;
+    private boolean allowedToConnectToCloud = false;
+    private boolean connectionAttemptFinished = false;
+    private boolean networkedChanged = false;
+    private boolean networkOnline=false;
+
+
     public Monitor() {
     }
 
@@ -75,4 +83,87 @@ public class Monitor {
     }
 
 
+//    public synchronized void connected() {
+//        online=true;
+//        notifyAll();
+//    }
+//
+//    public synchronized void waitUntilOnline() {
+//        while(!online){
+//            try {
+//                wait();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+
+    public synchronized void networkOnline() {
+        networkedChanged = true;
+        networkOnline = true;
+        notifyAll();
+    }
+
+    public synchronized void networkOffline() {
+        networkedChanged = true;
+        networkOnline = false;
+        notifyAll();
+
+    }
+
+    public synchronized boolean waitForNetworkChange() {
+        while(!networkedChanged){
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        networkedChanged=false;
+        return networkOnline;
+    }
+
+    public synchronized void notifyCloudConnection() {
+        allowedToConnectToCloud = true;
+        notifyAll();
+
+    }
+    public synchronized void waitForCloudConnectionAllowance(){
+        System.out.println("väntar");
+        while(!allowedToConnectToCloud){
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("färdigväntad");
+    }
+
+    public synchronized boolean waitForCloudConnectionResult() {
+        while(!connectionAttemptFinished){
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        connectionAttemptFinished=false;
+        return connectedToCloud;
+    }
+
+    public synchronized void notifyCloudConnectionResult(boolean result){
+        allowedToConnectToCloud=false;
+        connectionAttemptFinished=true;
+        connectedToCloud=result;
+        notifyAll();
+    }
+
+    public synchronized boolean isConnectedToCloud(){
+        return connectedToCloud;
+    }
+
+    public synchronized void disconnectedFromCloud() {
+        connectedToCloud=false;
+    }
 }
