@@ -619,11 +619,14 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
         ImageView connectionButton = (ImageView) activity.findViewById(R.id.connectionButton);
         //borde kanske göras på något annat sätt
         if(connectionButton!=null) {
-            if (status) {
+            if (connected) {
                 connectionButton.setImageResource(R.drawable.aga_zbee_v2_button_connection_on);
             } else {
                 connectionButton.setImageResource(R.drawable.aga_zbee_v2_button_connection_off);
             }
+        }
+        else{
+            System.out.println("Jag var visst null null");
         }
     }
 }

@@ -47,9 +47,11 @@ public class ConnectionStatusThread extends Thread {
             }
             //vi har inget nätverk
             else {
+                System.out.println("nu ska jag bli röd");
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        System.out.println("så röd och fin jag ska bli");
                         layoutManager.setConnectionStatus(false);
                     }
                 });
