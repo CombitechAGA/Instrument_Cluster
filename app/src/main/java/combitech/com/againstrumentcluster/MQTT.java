@@ -49,23 +49,16 @@ public class MQTT extends Thread implements CloudPutter {
             monitor.notifyCloudConnectionResult(connected);
             while (connected) {
 
-               // int type = monitor.dataUpdated();
-                int type=SPEED;
-                System.out.println("före sleep");
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("efter sleep");
+               int type = monitor.dataUpdated();
+
 
 
 
                 boolean publishResult=false;
                 switch (type) {
                     case SPEED:
-                       // float speed = monitor.getSpeed();
-                        float speed = 5.0f;
+                       float speed = monitor.getSpeed();
+                        //float speed = 5.0f;
                         publishResult = publishSpeed(speed);
                         break;
                     case FUEL:
