@@ -9,11 +9,11 @@ public interface CloudPutter {
 
     public boolean createConnection();
 
-    public void publishSpeed(float speed);
+    public boolean publishSpeed(float speed);
 
-    public void publishBatteryLevel(float percent);
+    public boolean publishBatteryLevel(float percent);
 
-    public void publishDistanceTraveled(long distance);
+    public boolean publishDistanceTraveled(long distance);
 
     public void start();
 }

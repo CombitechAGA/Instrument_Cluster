@@ -30,43 +30,65 @@ public class MQTT extends Thread implements CloudPutter {
     private Monitor monitor;
 
     public MQTT(Monitor monitor) {
-        this.monitor=monitor;
+        this.monitor = monitor;
     }
 
-    public void start(){
+    public void start() {
         super.start();
     }
 
     @Override
-    public void run(){
+    public void run() {
         readConfig();
-        if(!createConnection()){ //borde vara en while loop
-            //kör någon waitForConnectionMetod (som blockerar) den bör aktivera om vi får internet eller användaren klickar på connect
-            System.out.println("Connection failed");
-            return;
-        }
-        while(true){
-            int type = monitor.dataUpdated();
-            switch (type){
-                case SPEED:
-                    float speed = monitor.getSpeed();
-                    publishSpeed(speed);
-                    break;
-                case FUEL:
-                    float fuel = monitor.getFuel();
-                    publishBatteryLevel(fuel);
-                    break;
-                case DISTANCE_TRAVELED:
-                    long distanceTraveled = monitor.getDistanceTraveled();
-                    publishDistanceTraveled(distanceTraveled);
-                    break;
-                default:
-                    System.err.println("Unkown datatype");
-                    System.exit(1);
+
+
+        while (true) {
+            System.out.println("mqttn kör--------------------------------------");
+            monitor.waitForCloudConnectionAllowance();
+            boolean connected = createConnection();
+            monitor.notifyCloudConnectionResult(connected);
+            while (connected) {
+
+               // int type = monitor.dataUpdated();
+                int type=SPEED;
+                System.out.println("före sleep");
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("efter sleep");
+
+
+
+                boolean publishResult=false;
+                switch (type) {
+                    case SPEED:
+                       // float speed = monitor.getSpeed();
+                        float speed = 5.0f;
+                        publishResult = publishSpeed(speed);
+                        break;
+                    case FUEL:
+                        float fuel = monitor.getFuel();
+                        publishResult=publishBatteryLevel(fuel);
+                        break;
+                    case DISTANCE_TRAVELED:
+                        long distanceTraveled = monitor.getDistanceTraveled();
+                        publishResult=publishDistanceTraveled(distanceTraveled);
+                        break;
+                    default:
+                        System.err.println("unknown datatype");
+                        System.exit(1);
+
+                }
+                if(!publishResult){
+                    connected=false;
+                }
 
             }
-        }
 
+
+        }
 
     }
 
@@ -96,37 +118,43 @@ public class MQTT extends Thread implements CloudPutter {
     }
 
     @Override
-    public void publishSpeed(float speed) {
+    public boolean publishSpeed(float speed) {
         String topic = "telemetry/speed";
         String message = "" + speed;
         try {
-            client.publish(topic,message.getBytes(),0,false);
-        } catch (MqttException e) {
-            e.printStackTrace();
+            client.publish(topic, message.getBytes(), 0, false);
+        } catch (Exception e) {
+            //  e.printStackTrace();
+            return false;
         }
+        return true;
 
     }
 
     @Override
-    public void publishBatteryLevel(float percent) {
+    public boolean publishBatteryLevel(float percent) {
         String topic = "telemetry/fuel";
         String message = "" + percent;
         try {
-            client.publish(topic,message.getBytes(),0,false);
-        } catch (MqttException e) {
-            e.printStackTrace();
+            client.publish(topic, message.getBytes(), 0, false);
+        } catch (Exception e) {
+            // e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     @Override
-    public void publishDistanceTraveled(long distance) {
+    public boolean publishDistanceTraveled(long distance) {
         String topic = "telemetry/distanceTraveled";
         String message = "" + distance;
         try {
-            client.publish(topic,message.getBytes(),0,false);
-        } catch (MqttException e) {
-            e.printStackTrace();
+            client.publish(topic, message.getBytes(), 0, false);
+        } catch (Exception e) {
+            //e.printStackTrace();
+            return false;
         }
+        return true;
 
 
     }

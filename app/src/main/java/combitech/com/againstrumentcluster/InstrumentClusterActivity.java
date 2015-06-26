@@ -2,6 +2,8 @@ package combitech.com.againstrumentcluster;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.swedspot.automotive.AutomotiveManager;
 import android.swedspot.automotiveapi.AutomotiveSignal;
@@ -50,6 +52,9 @@ public class InstrumentClusterActivity extends Activity {
         // Ändra layout här
         //final ActivityLayoutManager layoutManager = new ActivityLayoutManager(this, vehicleDataModel, safeDataModel, safeClient);
         final ActivityLayoutManager_v2 layoutManager = new ActivityLayoutManager_v2(this, vehicleDataModel, safeDataModel, safeClient);
+        ConnectionStatusThread connectionStatusThread= new ConnectionStatusThread(monitor,layoutManager,this);
+        connectionStatusThread.start();
+
         manager = (AutomotiveManager) getApplicationContext().getSystemService(Context.AUTOMOTIVE_SERVICE);
         manager.setListener(new AutomotiveListener() {
             @Override
@@ -65,7 +70,7 @@ public class InstrumentClusterActivity extends Activity {
                             layoutManager.updateSpeed();
                         }
                     });
-                  //  cloudPutter.publishSpeed(data.getFloatValue());
+                    //  cloudPutter.publishSpeed(data.getFloatValue());
                     monitor.updateSpeed(data.getFloatValue());
 
                 } else if (automotiveSignal.getSignalId() == AutomotiveSignalId.FMS_FUEL_LEVEL_1) {
@@ -78,7 +83,7 @@ public class InstrumentClusterActivity extends Activity {
                             layoutManager.updateRange();
                         }
                     });
-                 //   cloudPutter.publishBatteryLevel(data.getFloatValue());
+                    //   cloudPutter.publishBatteryLevel(data.getFloatValue());
                     monitor.updateFuel(data.getFloatValue());
                 } else if (automotiveSignal.getSignalId() == AutomotiveSignalId.FMS_HIGH_RESOLUTION_TOTAL_VEHICLE_DISTANCE) {
                     final SCSLong data = (SCSLong) automotiveSignal.getData();
@@ -111,6 +116,11 @@ public class InstrumentClusterActivity extends Activity {
                 manager.register(AutomotiveSignalId.FMS_HIGH_RESOLUTION_TOTAL_VEHICLE_DISTANCE);
             }
         }).start();
+
+        NetworkStateReceiver networkStateReceiver = new NetworkStateReceiver(monitor);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkStateReceiver, intentFilter);
 
     }
 
