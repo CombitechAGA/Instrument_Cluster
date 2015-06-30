@@ -38,7 +38,7 @@ public class InstrumentClusterActivity extends Activity {
         new Thread(updateRunnable).start();
         final Monitor monitor = new Monitor();
 
-        final CloudPutter cloudPutter = new MQTT(monitor);
+        final CloudPutter cloudPutter = new MQTT(monitor, this);
         cloudPutter.start();
 
 

@@ -1,36 +1,45 @@
 package combitech.com.againstrumentcluster;
 
+import android.content.Context;
+
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 /**
  * Created by Fredrik on 2015-06-23.
  */
 public class MQTT extends Thread implements CloudPutter {
 
-
+    private Context context;
     private final static int SPEED = 1;
     private final static int FUEL = 2;
     private final static int DISTANCE_TRAVELED = 3;
 
 
-    // private static String IP = "tcp://mqtt.phelicks.net:1883";
-    private static String IP = "tcp://81.236.122.249:1883";
+    private String IP; // = "tcp://mqtt.phelicks.net:1883";
+    //private static String IP = "tcp://81.236.122.249:1883";
 
-    //Från bilen, hur?
-    private static String clientID = "carID";
+    //Frï¿½n bilen, hur?
+    private String clientID;// = "carID";
+    private String user;
+    private String pass;
 
-    int qos = 2;
+    int qos = 0;// = 2;
 
     private MqttClient client;
     private boolean connected = false;
 
     private Monitor monitor;
 
-    public MQTT(Monitor monitor) {
+    public MQTT(Monitor monitor, Context context) {
         this.monitor = monitor;
+        this.context = context;
     }
 
     public void start() {
@@ -39,11 +48,8 @@ public class MQTT extends Thread implements CloudPutter {
 
     @Override
     public void run() {
-        readConfig();
-
-
-        while (true) {
-            System.out.println("mqttn kör--------------------------------------");
+         while (true) {
+            System.out.println("mqttn kï¿½r--------------------------------------");
             monitor.waitForCloudConnectionAllowance();
             boolean connected = createConnection();
             System.out.println("Connection: " + connected);
@@ -93,18 +99,38 @@ public class MQTT extends Thread implements CloudPutter {
 
     @Override
     public void readConfig() {
-
-        //för att läsa in ip, qos, topics osv.
-
+        //fï¿½r att lï¿½sa in ip, qos, topics osv.
+        InputStream is = context.getResources().openRawResource(R.raw.config);
+        BufferedReader br;
+        ArrayList<String> list = new ArrayList<String>();
+        try {
+            //vÃ¤ldigt fult!! hitta inte filen i projektet.
+            br = new BufferedReader(new InputStreamReader(is));
+            String line = br.readLine();
+            int n = 0;
+            while (line != null) {
+                String[] parts = line.split("#");
+                list.add(parts[1]);
+                line = br.readLine();
+            }
+            IP = list.get(0);
+            clientID = list.get(1);
+            qos = Integer.parseInt(list.get(2));
+            user = list.get(3);
+            pass = list.get(4);
+        }catch (Exception e) {
+                e.printStackTrace();
+            }
     }
 
     @Override
     public boolean createConnection() {
         try {
+            readConfig();
             client = new MqttClient(IP, clientID, new MemoryPersistence());
             MqttConnectOptions options = new MqttConnectOptions();
-            options.setUserName("cab");
-            options.setPassword("sjuttongubbar".toCharArray());
+            options.setUserName(user);
+            options.setPassword(pass.toCharArray());
             client.connect(options);
 
             return true;

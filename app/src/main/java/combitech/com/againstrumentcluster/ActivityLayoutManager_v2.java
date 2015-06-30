@@ -445,7 +445,7 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
                 setBlinkingRight(false);
                 leftBlinkersTimer.stop();
                 rightBlinkersTimer.stop();
-                System.out.println("Is hazard: "+isHazard);
+                System.out.println("Is hazard: " + isHazard);
                 if (isHazard()) {
                     setBlinkingRightOn(true);
                     setBlinkingLeftOn(true);
@@ -529,7 +529,11 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
     }
 
     public void updateRange() {
-        batteryRangeView.setRangePercentageFilled(vehicleDataModel.getBatteryLevel());
+        if(monitor.isConnectedToCloud()) {
+            batteryRangeView.setRangePercentageFilled(vehicleDataModel.getBatteryLevel()-0.1f);
+        } else {
+            batteryRangeView.setRangePercentageFilled(vehicleDataModel.getBatteryLevel());
+        }
     }
 
     public void updateOdometer() {
