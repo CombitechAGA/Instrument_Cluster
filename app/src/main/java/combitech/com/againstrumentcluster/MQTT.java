@@ -56,14 +56,8 @@ public class MQTT extends Thread implements CloudPutter {
             monitor.notifyCloudConnectionResult(connected);
             while (connected) {
 
+
                 int type = monitor.dataUpdated();
-                if (monitor.manualDisconnect()) {
-                    connected = false;
-                    monitor.disconnectedFromCloud();
-                    break;
-                }
-
-
                 boolean publishResult = false;
                 switch (type) {
                     case SPEED:
@@ -78,6 +72,9 @@ public class MQTT extends Thread implements CloudPutter {
                     case DISTANCE_TRAVELED:
                         long distanceTraveled = monitor.getDistanceTraveled();
                         publishResult = publishDistanceTraveled(distanceTraveled);
+                        break;
+                    case -1:
+                        //-1 means that the user wants to disconnect.
                         break;
                     default:
                         System.err.println("unknown datatype");

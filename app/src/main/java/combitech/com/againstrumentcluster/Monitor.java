@@ -85,7 +85,13 @@ public class Monitor {
             } else if (distanceTraveledUpdated) {
                 distanceTraveledUpdated = false;
                 return DISTANCE_TRAVELED;
-            } else {
+            }
+              else if (manualDisconnectRequest){
+                manualDisconnectRequest=false;
+                return -1;
+
+            }
+            else {
                 try {
                     wait();
                 } catch (InterruptedException e) {
@@ -120,6 +126,10 @@ public class Monitor {
             }
         }
         networkedChanged=false;
+    }
+
+    public synchronized int getNetworkChange() {
+        return lastNetworkChange;
     }
 
     public synchronized void notifyCloudConnection() {
@@ -169,22 +179,10 @@ public class Monitor {
         notifyAll();
     }
 
-    public synchronized int getNetworkChange() {
-        return lastNetworkChange;
-    }
 
     public synchronized void doManualDisconnect(){
         manualDisconnectRequest=true;
         notifyAll();
-    }
-
-    public synchronized boolean manualDisconnect() {
-        boolean temp = manualDisconnectRequest;
-        if(manualDisconnectRequest){
-            manualDisconnectRequest=false;
-        }
-        return temp;
-
     }
 
     public synchronized void doManualConnect() {
