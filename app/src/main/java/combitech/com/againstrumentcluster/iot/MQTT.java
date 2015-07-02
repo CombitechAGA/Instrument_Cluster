@@ -133,7 +133,6 @@ public class MQTT extends Thread implements CloudPutter {
         BufferedReader br;
         ArrayList<String> list = new ArrayList<String>();
         try {
-            //väldigt fult!! hitta inte filen i projektet.
             br = new BufferedReader(new InputStreamReader(is));
             String line = br.readLine();
             int n = 0;
