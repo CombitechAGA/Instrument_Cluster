@@ -1,4 +1,4 @@
-package combitech.com.againstrumentcluster;
+package combitech.com.againstrumentcluster.iot;
 
 /**
  * Created by Fredrik on 2015-06-23.

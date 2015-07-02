@@ -6,6 +6,7 @@
             <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
         </intent-filter>
     </receiver>
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.BROADCAST_STICKY"/>
@@ -13,7 +14,8 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        android:name=".iot.appcore.MyApplication">
         <activity
             android:name=".InstrumentClusterActivity"
             android:label="@string/app_name"
@@ -23,6 +25,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name="combitech.com.againstrumentcluster.iot.IOTAlarmBroadcastReceiver" android:enabled="true" ></receiver>
+        <service android:name="combitech.com.againstrumentcluster.iot.MQTTIntervalService" android:enabled="true" ></service>
     </application>
 
 </manifest>

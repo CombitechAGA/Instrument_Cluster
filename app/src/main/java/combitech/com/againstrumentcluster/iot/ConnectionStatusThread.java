@@ -1,8 +1,8 @@
-package combitech.com.againstrumentcluster;
+package combitech.com.againstrumentcluster.iot;
 
 import android.app.Activity;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
+
+import combitech.com.againstrumentcluster.ActivityLayoutManager_v2;
 
 /**
  * Created by Fredrik on 2015-06-25.
@@ -105,6 +105,7 @@ public class ConnectionStatusThread extends Thread {
     }
 
     private void tryToConnect(){
+        System.out.println("Nu försöker jag connecta");
         monitor.notifyCloudConnection();
         boolean connected = monitor.waitForCloudConnectionResult();
         updateConnectionButton(connected);

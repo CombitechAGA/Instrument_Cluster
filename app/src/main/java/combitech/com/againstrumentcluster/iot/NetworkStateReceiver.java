@@ -1,4 +1,4 @@
-package combitech.com.againstrumentcluster;
+package combitech.com.againstrumentcluster.iot;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,10 +6,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 public class NetworkStateReceiver extends BroadcastReceiver {
     private static final String TAG = "NetworkStateReceiver";

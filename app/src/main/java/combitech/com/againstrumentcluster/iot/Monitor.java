@@ -1,4 +1,6 @@
-package combitech.com.againstrumentcluster;
+package combitech.com.againstrumentcluster.iot;
+
+import android.util.Log;
 
 /**
  * Created by Fredrik on 2015-06-25.
@@ -15,7 +17,7 @@ public class Monitor {
     private final static int NETWORK_CONNECTION_OFF = 2;
     private final static int CLOUD_CONNECTION_LOST = 3;
     private final static int MANUAL_CONNECTION_ATTEMPT = 4;
-
+    private static final String LOG_TAG = Monitor.class.getSimpleName();
 
 
     private float speed;
@@ -189,5 +191,8 @@ public class Monitor {
         networkedChanged=true;
         lastNetworkChange = MANUAL_CONNECTION_ATTEMPT;
         notifyAll();
+    }
+    public void testPrint(){
+        Log.d(LOG_TAG, "In the monitor");
     }
 }

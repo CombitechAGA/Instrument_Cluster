@@ -1,15 +1,24 @@
-package combitech.com.againstrumentcluster;
+package combitech.com.againstrumentcluster.iot;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.SystemClock;
+import android.util.Log;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+
+import combitech.com.againstrumentcluster.R;
 
 /**
  * Created by Fredrik on 2015-06-23.
@@ -29,6 +38,7 @@ public class MQTT extends Thread implements CloudPutter {
     private String clientID;// = "carID";
     private String user;
     private String pass;
+    private int interval;
 
     int qos = 0;// = 2;
 
@@ -36,11 +46,33 @@ public class MQTT extends Thread implements CloudPutter {
     private boolean connected = false;
 
     private Monitor monitor;
+    private Database database;
+    private AlarmManager mAlarmMgr;
+    private PendingIntent mAlarmIntent;
 
     public MQTT(Monitor monitor, Context context) {
         this.monitor = monitor;
         this.context = context;
+        database = new ArrayListDatabase();
+        readConfig();
+        startIntervalTimer();
+
     }
+
+    private void startIntervalTimer() {
+        mAlarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, IOTAlarmBroadcastReceiver.class);
+        mAlarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        mAlarmMgr.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 1000,
+                interval * 1000, mAlarmIntent);
+    }
+    public void stopInterevalTimer(){
+        if (mAlarmMgr != null) {
+            mAlarmMgr.cancel(mAlarmIntent);
+        }
+    }
+
+
 
     public void start() {
         super.start();
@@ -115,6 +147,8 @@ public class MQTT extends Thread implements CloudPutter {
             qos = Integer.parseInt(list.get(2));
             user = list.get(3);
             pass = list.get(4);
+            interval = Integer.parseInt(list.get(5));
+
         }catch (Exception e) {
                 e.printStackTrace();
             }
@@ -123,7 +157,7 @@ public class MQTT extends Thread implements CloudPutter {
     @Override
     public boolean createConnection() {
         try {
-            readConfig();
+
             client = new MqttClient(IP, clientID, new MemoryPersistence());
             MqttConnectOptions options = new MqttConnectOptions();
             options.setUserName(user);
@@ -179,5 +213,18 @@ public class MQTT extends Thread implements CloudPutter {
         return true;
 
 
+    }
+
+    public Database getDatabase() {
+        return database;
+    }
+
+    public void sendIntervalData() throws MqttException {
+        if (connected) {
+            while (!database.isEmpty()) {
+                CarSnapShot snapShot = database.getLatestSnapshot();
+                client.publish("telemetry/snapshot", snapShot.toString().getBytes(), 0, false);
+            }
+        }
     }
 }

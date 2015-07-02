@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import combitech.com.againstrumentcluster.iot.Monitor;
+
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 public class ActivityLayoutManager_v2 extends RelativeLayout {
