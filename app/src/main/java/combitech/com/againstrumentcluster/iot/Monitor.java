@@ -23,6 +23,8 @@ public class Monitor {
     private float speed;
     private float fuel;
     private long distanceTraveled;
+    private double longitude;
+    private double latitude;
 
     private boolean speedUpdated = false;
     private boolean fuelUpdated = false;
@@ -194,5 +196,21 @@ public class Monitor {
     }
     public void testPrint(){
         Log.d(LOG_TAG, "In the monitor");
+    }
+
+    public synchronized void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public synchronized void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public synchronized double getLongitude() {
+        return longitude;
+    }
+
+    public synchronized double getLatitude() {
+        return latitude;
     }
 }

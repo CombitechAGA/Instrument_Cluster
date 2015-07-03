@@ -3,6 +3,8 @@ package combitech.com.againstrumentcluster.iot;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.util.Log;
 
 import combitech.com.againstrumentcluster.iot.appcore.MyApplication;
@@ -21,7 +23,7 @@ public class IOTAlarmBroadcastReceiver extends BroadcastReceiver {
         MQTT mqtt = app.getMQTT();
         Monitor monitor = app.getMonitor();
         Database db = mqtt.getDatabase();
-        CarSnapShot snapShot = new CarSnapShot(System.currentTimeMillis(),monitor.getFuel(),monitor.getSpeed(),monitor.getDistanceTraveled());
+        CarSnapShot snapShot = new CarSnapShot(mqtt.getClientID(),System.currentTimeMillis(),monitor.getFuel(),monitor.getSpeed(),monitor.getDistanceTraveled(),monitor.getLongitude(),monitor.getLatitude());
         new WriteToDatabase(db).execute(snapShot);
         Intent mqttIntervalServiceIntent = new Intent(MQTTIntervalService.ACTION_SYNC,null,context,MQTTIntervalService.class);
         context.startService(mqttIntervalServiceIntent);

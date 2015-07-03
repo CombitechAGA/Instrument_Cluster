@@ -139,7 +139,6 @@ public class InstrumentClusterActivity extends Activity {
     @Override
     public void onPause(){
         System.out.println("nu körs on pause");
-        ((MyApplication) getApplicationContext()).getMQTT().stopInterevalTimer();
         super.onStop();
     }
 

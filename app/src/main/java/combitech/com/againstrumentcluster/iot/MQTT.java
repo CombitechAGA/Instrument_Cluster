@@ -5,6 +5,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.SystemClock;
 import android.util.Log;
 
@@ -24,6 +26,7 @@ import combitech.com.againstrumentcluster.R;
  * Created by Fredrik on 2015-06-23.
  */
 public class MQTT extends Thread implements CloudPutter {
+    private static final String LOG_TAG = MQTT.class.getSimpleName();
 
     private Context context;
     private final static int SPEED = 1;
@@ -54,9 +57,15 @@ public class MQTT extends Thread implements CloudPutter {
         this.monitor = monitor;
         this.context = context;
         database = new ArrayListDatabase();
+        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiInfo wInfo = wifiManager.getConnectionInfo();
+        clientID = wInfo.getMacAddress();
         readConfig();
         startIntervalTimer();
 
+    }
+    public String getClientID(){
+        return clientID;
     }
 
     private void startIntervalTimer() {
@@ -83,7 +92,7 @@ public class MQTT extends Thread implements CloudPutter {
          while (true) {
             System.out.println("mqttn k�r--------------------------------------");
             monitor.waitForCloudConnectionAllowance();
-            boolean connected = createConnection();
+            connected = createConnection();
             System.out.println("Connection: " + connected);
             monitor.notifyCloudConnectionResult(connected);
             while (connected) {
@@ -142,7 +151,7 @@ public class MQTT extends Thread implements CloudPutter {
                 line = br.readLine();
             }
             IP = list.get(0);
-            clientID = list.get(1);
+            //clientID = list.get(1);
             qos = Integer.parseInt(list.get(2));
             user = list.get(3);
             pass = list.get(4);

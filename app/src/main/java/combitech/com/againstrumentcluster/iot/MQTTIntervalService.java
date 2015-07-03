@@ -21,20 +21,20 @@ public class MQTTIntervalService extends IntentService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(LOG_TAG, "on start command");
+       // Log.d(LOG_TAG, "on start command");
         return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d(LOG_TAG, "intent started");
+      //  Log.d(LOG_TAG, "intent started");
         if (intent.getAction().equals(ACTION_SYNC)) {
-            Log.d(LOG_TAG, "Action sync received");
+           // Log.d(LOG_TAG, "Action sync received");
             MQTT mqtt = ((MyApplication) getApplicationContext()).getMQTT();
             try {
                 mqtt.sendIntervalData();
             } catch (MqttException e) {
-
+                System.out.println(e.getStackTrace());
             }
         }
 
