@@ -22,7 +22,7 @@ public class CarSnapShot {
     }
     @Override
     public String toString(){
-        String toString = "carID:"+carID+";timestamp:"+timestamp+";fuel:"+fuel+";speed:"+speed+";distanceTraveled:"+distanceTraveled+";longitude:"+longitude+";+latitude:"+latitude;
+        String toString = "carID:"+carID+";timestamp:"+timestamp+";fuel:"+fuel+";speed:"+speed+";distanceTraveled:"+distanceTraveled+";longitude:"+longitude+";latitude:"+latitude;
         return toString;
     }
 }
