@@ -213,18 +213,19 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
         connectionButton.setClickable(false);
         connectionButton.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
-                connectionButton.setClickable(false);
-                System.out.println("nu klickade du");
-                if(connected){
-                    System.out.println("nu vill jag att du disconnectar");
-                //    connectionButton.setImageResource(R.drawable.aga_zbee_v2_button_connection_off);
-                    monitor.doManualDisconnect();
-                    //monitor.doManualDisconnect();
-                }
-                else{
-                    System.out.println("nu vill jag att du connectar");
-                    monitor.doManualConnect();
-                }
+                return;
+//                connectionButton.setClickable(false);
+//                System.out.println("nu klickade du");
+//                if(connected){
+//                    System.out.println("nu vill jag att du disconnectar");
+//                //    connectionButton.setImageResource(R.drawable.aga_zbee_v2_button_connection_off);
+//                    monitor.doManualDisconnect();
+//                    //monitor.doManualDisconnect();
+//                }
+//                else{
+//                    System.out.println("nu vill jag att du connectar");
+//                    monitor.doManualConnect();
+//                }
 
 
 
