@@ -220,4 +220,8 @@ public class Monitor {
     public synchronized double getLatitude() {
         return latitude;
     }
+
+//    public synchronized float getDistancePrediction() {
+//        return distancePrediction;
+//    }
 }

@@ -55,6 +55,7 @@ public class MQTT extends Thread implements CloudPutter {
     private AlarmManager mAlarmMgr;
     private PendingIntent mAlarmIntent;
     private Activity currentActivity = null;
+    MqttListener listener = null;
 
     public MQTT(Monitor monitor, Context context) {
         this.monitor = monitor;
@@ -63,6 +64,7 @@ public class MQTT extends Thread implements CloudPutter {
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo wInfo = wifiManager.getConnectionInfo();
         clientID = wInfo.getMacAddress();
+        //listener = new MqttListener();
         readConfig();
         startIntervalTimer();
 
@@ -98,6 +100,20 @@ public class MQTT extends Thread implements CloudPutter {
             connected = createConnection();
             System.out.println("Connection: " + connected);
             monitor.notifyCloudConnectionResult(connected);
+            if (connected){
+                listener = new MqttListener();
+                String topic=clientID+"/"+"distancePrediction";
+                Log.d(LOG_TAG,"topic: "+topic);
+                try {
+                    client.subscribe(topic);
+                } catch (MqttException e) {
+                    e.printStackTrace();
+                }
+                listener.registerActivity(currentActivity);
+                client.setCallback(listener);
+
+            }
+
             while (connected) {
 
 
@@ -189,7 +205,7 @@ public class MQTT extends Thread implements CloudPutter {
     @Override
     public boolean publishSpeed(float speed) {
         String topic = "telemetry/speed";
-        String message = "" + speed;
+        String message = clientID+";" + speed;
         try {
             client.publish(topic, message.getBytes(), 0, false);
         } catch (Exception e) {
@@ -203,7 +219,7 @@ public class MQTT extends Thread implements CloudPutter {
     @Override
     public boolean publishBatteryLevel(float percent) {
         String topic = "telemetry/fuel";
-        String message = "" + percent;
+        String message = clientID+";" + percent;
         try {
             client.publish(topic, message.getBytes(), 0, false);
         } catch (Exception e) {
@@ -216,7 +232,7 @@ public class MQTT extends Thread implements CloudPutter {
     @Override
     public boolean publishDistanceTraveled(long distance) {
         String topic = "telemetry/distanceTraveled";
-        String message = "" + distance;
+        String message = clientID+";" + distance;
         try {
             client.publish(topic, message.getBytes(), 0, false);
         } catch (Exception e) {
@@ -243,8 +259,15 @@ public class MQTT extends Thread implements CloudPutter {
 
     public void deRegisterActivity(){
         currentActivity = null;
+        if(listener!=null){
+            listener.unregisterActivity();
+        }
     }
+
     public void registerActivity(Activity currentActivity) {
         this.currentActivity = currentActivity;
+        if(listener!=null){
+            listener.registerActivity(currentActivity);
+        }
     }
 }
