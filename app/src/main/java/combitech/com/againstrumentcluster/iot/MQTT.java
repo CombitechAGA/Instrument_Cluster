@@ -1,5 +1,6 @@
 package combitech.com.againstrumentcluster.iot;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -20,6 +21,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import combitech.com.againstrumentcluster.InstrumentClusterActivity;
 import combitech.com.againstrumentcluster.R;
 
 /**
@@ -52,6 +54,7 @@ public class MQTT extends Thread implements CloudPutter {
     private Database database;
     private AlarmManager mAlarmMgr;
     private PendingIntent mAlarmIntent;
+    private Activity currentActivity = null;
 
     public MQTT(Monitor monitor, Context context) {
         this.monitor = monitor;
@@ -115,6 +118,7 @@ public class MQTT extends Thread implements CloudPutter {
                         publishResult = publishDistanceTraveled(distanceTraveled);
                         break;
                     case -1:
+                        publishResult=false;
                         //-1 means that the user wants to disconnect.
                         break;
                     default:
@@ -171,6 +175,7 @@ public class MQTT extends Thread implements CloudPutter {
             options.setUserName(user);
             options.setPassword(pass.toCharArray());
             client.connect(options);
+
 
             return true;
 
@@ -234,5 +239,12 @@ public class MQTT extends Thread implements CloudPutter {
                 client.publish("telemetry/snapshot", snapShot.toString().getBytes(), 0, false);
             }
         }
+    }
+
+    public void deRegisterActivity(){
+        currentActivity = null;
+    }
+    public void registerActivity(Activity currentActivity) {
+        this.currentActivity = currentActivity;
     }
 }

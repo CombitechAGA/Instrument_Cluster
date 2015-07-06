@@ -80,6 +80,7 @@ public class Monitor {
 
     public synchronized int dataUpdated() {
         while (true) {
+            System.out.println("data updated maybe baybe");
             if (speedUpdated) {
                 speedUpdated = false;
                 return SPEED;
@@ -94,6 +95,9 @@ public class Monitor {
                 manualDisconnectRequest=false;
                 return -1;
 
+            }
+            else if(lastNetworkChange==NETWORK_CONNECTION_OFF){
+                return -1;
             }
             else {
                 try {
@@ -144,6 +148,7 @@ public class Monitor {
     public synchronized void waitForCloudConnectionAllowance(){
         System.out.println("väntar");
         while(!allowedToConnectToCloud){
+            System.out.println("väntar2");
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -155,6 +160,7 @@ public class Monitor {
 
     public synchronized boolean waitForCloudConnectionResult() {
         while(!connectionAttemptFinished){
+            System.out.println("Jag väntar på att connection result ska vara klart");
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -193,6 +199,7 @@ public class Monitor {
         networkedChanged=true;
         lastNetworkChange = MANUAL_CONNECTION_ATTEMPT;
         notifyAll();
+        System.out.println("Do manual connect");
     }
     public void testPrint(){
         Log.d(LOG_TAG, "In the monitor");

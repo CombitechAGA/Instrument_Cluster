@@ -58,6 +58,7 @@ public class ConnectionStatusThread extends Thread {
                     break;
                 case NETWORK_CONNECTION_OFF:
                     updateConnectionButton(false);
+
                     break;
 //                    System.out.println("nu ska jag bli röd");
 //                    activity.runOnUiThread(new Runnable() {
@@ -83,6 +84,7 @@ public class ConnectionStatusThread extends Thread {
 //                        });
 //
 //                    }
+                    System.out.println("Nu ska du försöka connecta här från connection ");
                     tryToConnect();
                     break;
 
@@ -109,6 +111,7 @@ public class ConnectionStatusThread extends Thread {
         monitor.notifyCloudConnection();
         boolean connected = monitor.waitForCloudConnectionResult();
         updateConnectionButton(connected);
+        System.out.println("NU har ett connection attenmpt skett");
     }
 
 

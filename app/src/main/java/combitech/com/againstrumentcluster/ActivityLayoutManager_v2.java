@@ -172,6 +172,7 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
     }
 
     public void setupViewNormal() {
+
         System.out.println("Nu visar jag normala vyn");
         activity.setContentView(R.layout.aga_zbee_main_v2);
         isMessageView = false;
@@ -209,18 +210,23 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
             connectionButton.setImageResource(R.drawable.aga_zbee_v2_button_connection_on);
         }
         connectionButton = (ImageView) activity.findViewById(R.id.connectionButton);
+        connectionButton.setClickable(false);
         connectionButton.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
+                connectionButton.setClickable(false);
                 System.out.println("nu klickade du");
                 if(connected){
                     System.out.println("nu vill jag att du disconnectar");
-                    connectionButton.setImageResource(R.drawable.aga_zbee_v2_button_connection_off);
+                //    connectionButton.setImageResource(R.drawable.aga_zbee_v2_button_connection_off);
                     monitor.doManualDisconnect();
+                    //monitor.doManualDisconnect();
                 }
                 else{
                     System.out.println("nu vill jag att du connectar");
                     monitor.doManualConnect();
                 }
+
+
 
             }
         });
@@ -531,6 +537,7 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
     }
 
     public void updateRange() {
+
         if(monitor.isConnectedToCloud()) {
             batteryRangeView.setRangePercentageFilled(vehicleDataModel.getBatteryLevel()-0.1f);
         } else {
@@ -652,5 +659,6 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
         else{
             System.out.println("Jag var visst null null");
         }
+        connectionButton.setClickable(true);
     }
 }

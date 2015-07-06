@@ -38,6 +38,7 @@ public class InstrumentClusterActivity extends Activity {
     private AlarmManager mAlarmMgr;
     private PendingIntent mAlarmIntent;
     private Monitor mMonitor;
+    private MQTT mMqtt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,9 @@ public class InstrumentClusterActivity extends Activity {
         new Thread(updateRunnable).start();
 
         mMonitor = ((MyApplication) getApplicationContext()).getMonitor();
+        mMqtt = ((MyApplication) getApplicationContext()).getMQTT();
+        mMqtt.registerActivity(this);
+        //registerActivity
 
         // Setup Alarm:
 //        mAlarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
