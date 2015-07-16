@@ -41,11 +41,11 @@ public class ConnectionStatusThread extends Thread {
             switch (change) {
                 case NETWORK_CONNECTION_ON:
                     tryToConnect();
-//                    System.out.println("Vi har ngt nätverk");
+//                    System.out.println("Vi har ngt nï¿½tverk");
 //                    monitor.notifyCloudConnection();
 //                    System.out.println("Vi har notifiat cloudconnectorn");
 //                    boolean connected = monitor.waitForCloudConnectionResult();
-//                    System.out.println("Vi har fått ett resultat: " + connected);
+//                    System.out.println("Vi har fï¿½tt ett resultat: " + connected);
 //                    if (connected) {
 //                        activity.runOnUiThread(new Runnable() {
 //                            @Override
@@ -60,7 +60,7 @@ public class ConnectionStatusThread extends Thread {
                     updateConnectionButton(false);
 
                     break;
-//                    System.out.println("nu ska jag bli röd");
+//                    System.out.println("nu ska jag bli rï¿½d");
 //                    activity.runOnUiThread(new Runnable() {
 //                        @Override
 //                        public void run() {
@@ -74,7 +74,7 @@ public class ConnectionStatusThread extends Thread {
 //                    monitor.notifyCloudConnection();
 //                    System.out.println("Vi har notifiat cloudconnectorn");
 //                    connected = monitor.waitForCloudConnectionResult();
-//                    System.out.println("Vi har fått ett resultat: " + connected);
+//                    System.out.println("Vi har fï¿½tt ett resultat: " + connected);
 //                    if (connected) {
 //                        activity.runOnUiThread(new Runnable() {
 //                            @Override
@@ -107,7 +107,7 @@ public class ConnectionStatusThread extends Thread {
     }
 
     private void tryToConnect(){
-        System.out.println("Nu försöker jag connecta");
+        System.out.println("Nu fï¿½rsï¿½ker jag connecta");
         monitor.notifyCloudConnection();
         boolean connected = monitor.waitForCloudConnectionResult();
         updateConnectionButton(connected);

@@ -52,8 +52,10 @@ public class IOTLocationListener implements android.location.LocationListener {
         if (location != null) {
             Log.d(LOG_TAG, location.toString());
             Toast.makeText(mContext, location.toString(), Toast.LENGTH_LONG).show();
+            mMonitor.setLongitude(location.getLongitude());
+            mMonitor.setLatitude(location.getLatitude());
         } else {
-            Log.d(LOG_TAG, "Location är null");
+            Log.d(LOG_TAG, "Location ï¿½r null");
             Toast.makeText(mContext, "Location null", Toast.LENGTH_LONG).show();
         }
     }

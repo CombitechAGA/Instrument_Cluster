@@ -146,7 +146,7 @@ public class Monitor {
 
     }
     public synchronized void waitForCloudConnectionAllowance(){
-        System.out.println("väntar");
+        System.out.println("vï¿½ntar");
         while(!allowedToConnectToCloud){
             System.out.println("väntar2");
             try {
@@ -155,7 +155,7 @@ public class Monitor {
                 e.printStackTrace();
             }
         }
-        System.out.println("färdigväntad");
+        System.out.println("fï¿½rdigvï¿½ntad");
     }
 
     public synchronized boolean waitForCloudConnectionResult() {
