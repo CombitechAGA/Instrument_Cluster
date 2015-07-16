@@ -39,6 +39,7 @@ public class InstrumentClusterActivity extends Activity {
     private PendingIntent mAlarmIntent;
     private Monitor mMonitor;
     private MQTT mMqtt;
+    private ActivityLayoutManager_v2 layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +67,7 @@ public class InstrumentClusterActivity extends Activity {
 
         // Ändra layout här
         //final ActivityLayoutManager layoutManager = new ActivityLayoutManager(this, vehicleDataModel, safeDataModel, safeClient);
-        final ActivityLayoutManager_v2 layoutManager = new ActivityLayoutManager_v2(this, vehicleDataModel, safeDataModel, safeClient, mMonitor);
+        layoutManager = new ActivityLayoutManager_v2(this, vehicleDataModel, safeDataModel, safeClient, mMonitor);
         ConnectionStatusThread connectionStatusThread= new ConnectionStatusThread(mMonitor, layoutManager,this);
         connectionStatusThread.start();
 
@@ -177,5 +178,9 @@ public class InstrumentClusterActivity extends Activity {
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 
+    public ActivityLayoutManager_v2 getLayoutManager(){
+        return layoutManager;
+
+    }
 
 }

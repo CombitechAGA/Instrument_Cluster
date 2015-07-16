@@ -73,6 +73,8 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
     private SAFEDataModel safeDataModel;
     private SAFEClient safeClient;
     private Monitor monitor;
+    public float lastRange;
+    private String LOG_TAG = ActivityLayoutManager_v2.class.getSimpleName();
 
     public ActivityLayoutManager_v2(final InstrumentClusterActivity activity, final VehicleDataModel vehicleDataModel, final SAFEDataModel safeDataModel, final SAFEClient safeClient,Monitor monitor) {
         super(activity);
@@ -138,7 +140,7 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
                 });
             }
         }, 12000);//Should be 2 minutes (120 000)but set to 12s for testing purposes
-
+        lastRange=vehicleDataModel.getBatteryLevel();
         setupViewNormal();
 
         updateGUITimer = new Timer(new Runnable() {
@@ -202,7 +204,8 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
 
         updateSpeed();
         updateBattery();
-        updateRange();
+        //updateRange();
+        batteryRangeView.setRangePercentageFilled(lastRange);
         updateOdometer();
 
         if (connected){
@@ -226,7 +229,6 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
 //                    System.out.println("nu vill jag att du connectar");
 //                    monitor.doManualConnect();
 //                }
-
 
 
             }
@@ -357,7 +359,8 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
 
         updateSpeed();
         updateBattery();
-        updateRange();
+        //updateRange();
+        batteryRangeView.setRangePercentageFilled(lastRange);
         updateOdometer();
     }
 
@@ -537,14 +540,31 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
         energyGlow.setImageResource(id);
     }
 
-    public void updateRange() {
 
-        if(monitor.isConnectedToCloud()) {
-            batteryRangeView.setRangePercentageFilled(vehicleDataModel.getBatteryLevel()-0.1f);
-        } else {
+    public void updateRangeOnline(float batteryLevel){
+        batteryRangeView.setRangePercentageFilled(batteryLevel);
+    }
+    public void updateRange() {
+        Log.d(LOG_TAG,"BatteryLevel: "+vehicleDataModel.getBatteryLevel());
+        if(!connected){
+
             batteryRangeView.setRangePercentageFilled(vehicleDataModel.getBatteryLevel());
         }
+//        else {
+//            batteryRangeView.setRangePercentageFilled(monitor.getDistancePrediction());
+//
+//
+//        }
+       // if(monitor.isConnectedToCloud()) {
+//          if(connected){
+//            batteryRangeView.setRangePercentageFilled(vehicleDataModel.getBatteryLevel()-0.1f);
+//        } else {
+//            batteryRangeView.setRangePercentageFilled(vehicleDataModel.getBatteryLevel());
+//        }
     }
+
+
+
 
     public void updateOdometer() {
         long odo = vehicleDataModel.getOdometer() / 256;
@@ -656,6 +676,7 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
             } else {
                 connectionButton.setImageResource(R.drawable.aga_zbee_v2_button_connection_off);
             }
+            updateRange();
         }
         else{
             System.out.println("Jag var visst null null");
