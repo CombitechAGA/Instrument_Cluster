@@ -13,6 +13,7 @@ public class Monitor {
     private final static int SPEED = 1;
     private final static int FUEL = 2;
     private final static int DISTANCE_TRAVELED = 3;
+    private final static int READ_MESSAGE = 4;
 
 
     private final static int NETWORK_CONNECTION_ON = 1;
@@ -46,6 +47,7 @@ public class Monitor {
 
     private int lastNetworkChange;
     private ArrayList<String> messages = new ArrayList<String>();
+    private ArrayList<String> readMessages = new ArrayList<String>();
 
     public Monitor() {
     }
@@ -93,6 +95,10 @@ public class Monitor {
             } else if (distanceTraveledUpdated) {
                 distanceTraveledUpdated = false;
                 return DISTANCE_TRAVELED;
+            }
+            else if(readMessages.size()!=0){
+                Log.d(LOG_TAG, "ska skicka medelande");
+                return READ_MESSAGE;
             }
               else if (manualDisconnectRequest){
                 manualDisconnectRequest=false;
@@ -239,7 +245,15 @@ public class Monitor {
     }
 
     public synchronized void messageRead() {
-        messages.remove(0);
+        readMessages.add(messages.remove(0));
+        notifyAll();
+    }
+    public synchronized String getReadMessage(){
+        return readMessages.get(0);
+    }
+
+    public synchronized void removeReadMessage() {
+        readMessages.remove(0);
     }
 
 //    public synchronized float getDistancePrediction() {

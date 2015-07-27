@@ -34,7 +34,7 @@ public class MQTT extends Thread implements CloudPutter {
     private final static int SPEED = 1;
     private final static int FUEL = 2;
     private final static int DISTANCE_TRAVELED = 3;
-
+    private final static int READ_MESSAGE = 4;
 
     private String IP; // = "tcp://mqtt.phelicks.net:1883";
     //private static String IP = "tcp://81.236.122.249:1883";
@@ -141,6 +141,10 @@ public class MQTT extends Thread implements CloudPutter {
                         long distanceTraveled = monitor.getDistanceTraveled();
                         publishResult = publishDistanceTraveled(distanceTraveled);
                         break;
+                    case READ_MESSAGE:
+                        Log.d(LOG_TAG,"ska köra publishAckkOfMessage");
+                        publishResult = publishAckOfMessage(monitor.getReadMessage());
+                        break;
                     case -1:
                         publishResult=false;
                         //-1 means that the user wants to disconnect.
@@ -233,6 +237,21 @@ public class MQTT extends Thread implements CloudPutter {
             client.publish(topic, message.getBytes(), 0, false);
         } catch (Exception e) {
             // e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean publishAckOfMessage(String message){
+        String topic = clientID+"/messageAck";
+        System.out.println(topic);
+        try {
+            System.out.println(message);
+            client.publish(topic, message.getBytes(), 0, false);
+            monitor.removeReadMessage();
+            System.out.println("message sent");
+        } catch (Exception e) {
+            //e.printStackTrace();
             return false;
         }
         return true;
