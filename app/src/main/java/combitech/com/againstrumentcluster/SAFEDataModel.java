@@ -12,15 +12,17 @@ import java.util.LinkedList;
  */
 public class SAFEDataModel {
     private Mission currentMission;
-    private boolean haveReadMessage = true;
+    private boolean haveReadMessage = false;
     public final static String SERVER_ADRESS = "http://192.168.1.187";
     public final static String LOCALHOST = "http://localhost";
 
     public String getCurrentMissionMessage() {
         if (currentMission != null) {
-            return currentMission.getMissionText();
+            return "Din Zbee måste servas";
+            //return currentMission.getMissionText();
         }
-        return null;
+        return "Din Zbee måste servas";
+        //return null;
     }
 
     public int getCurrentMissionId() {

@@ -27,12 +27,12 @@ public class IOTLocationListener implements android.location.LocationListener {
         mLocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
         Location lastKnownLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if (lastKnownLocation != null) {
+            System.out.println("Använder GPS");
             Log.d(LOG_TAG, lastKnownLocation.toString());
             Toast.makeText(mContext, lastKnownLocation.toString(), Toast.LENGTH_LONG).show();
             mMonitor.setLongitude(lastKnownLocation.getLongitude());
             mMonitor.setLatitude(lastKnownLocation.getLatitude());
-        }
-        else{
+        } else{
             Log.d(LOG_TAG,"Last known locatin is null");
             Toast.makeText(mContext, "Last known locatin is null", Toast.LENGTH_LONG).show();
         }

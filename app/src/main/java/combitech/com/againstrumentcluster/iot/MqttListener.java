@@ -15,12 +15,13 @@ import combitech.com.againstrumentcluster.InstrumentClusterActivity;
  * Created by Fredrik on 2015-07-03.
  */
 public class MqttListener implements MqttCallback {
+    private Monitor monitor;
     private String LOG_TAG = MqttListener.class.getSimpleName();
     private boolean connectionLost=false;
     private Activity registeredActivity = null;
 
-    public MqttListener(){
-
+    public MqttListener(Monitor monitor){
+        this.monitor = monitor;
     }
 
 
@@ -40,19 +41,23 @@ public class MqttListener implements MqttCallback {
     @Override
     public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
     //    System.out.println("is duplicate:"+mqttMessage.isDuplicate());
-        System.out.println("QOS: "+mqttMessage.getQos());
+        System.out.println("QOS: " + mqttMessage.getQos());
         if (connectionLost){
             Log.d(LOG_TAG, "Getting messages after losing the connection");
         }
 
         Log.d(LOG_TAG,"topic:"+topic+" message: "+mqttMessage.toString());
 
-        if(registeredActivity!=null){
-            ActivityLayoutManager_v2 layout = ((InstrumentClusterActivity)registeredActivity).getLayoutManager();
-            float distancePrediction = Float.parseFloat(mqttMessage.toString())/100.0f;
-            layout.lastRange=distancePrediction;
-            layout.updateRangeOnline(distancePrediction);
+        if (topic.contains("message")) {
+            monitor.addMessage(mqttMessage.toString());
+        } else {
 
+            if(registeredActivity!=null) {
+                ActivityLayoutManager_v2 layout = ((InstrumentClusterActivity) registeredActivity).getLayoutManager();
+                float distancePrediction = Float.parseFloat(mqttMessage.toString()) / 100.0f;
+                layout.lastRange = distancePrediction;
+                layout.updateRangeOnline(distancePrediction);
+            }
         }
         //if(registerActivity;)
        // registeredActivity

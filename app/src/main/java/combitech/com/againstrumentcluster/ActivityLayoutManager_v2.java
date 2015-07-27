@@ -76,7 +76,7 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
     public float lastRange;
     private String LOG_TAG = ActivityLayoutManager_v2.class.getSimpleName();
 
-    public ActivityLayoutManager_v2(final InstrumentClusterActivity activity, final VehicleDataModel vehicleDataModel, final SAFEDataModel safeDataModel, final SAFEClient safeClient,Monitor monitor) {
+    public ActivityLayoutManager_v2(final InstrumentClusterActivity activity, final VehicleDataModel vehicleDataModel, final SAFEDataModel safeDataModel, final SAFEClient safeClient, final Monitor monitor) {
         super(activity);
         this.activity = activity;
         this.vehicleDataModel = vehicleDataModel;
@@ -142,7 +142,6 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
         }, 12000);//Should be 2 minutes (120 000)but set to 12s for testing purposes
         lastRange=vehicleDataModel.getBatteryLevel();
         setupViewNormal();
-
         updateGUITimer = new Timer(new Runnable() {
             @Override
             public void run() {
@@ -150,16 +149,20 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
                     @Override
                     public void run() {
                         clock.setText(new SimpleDateFormat("HH:mm").format(new Date()).toString());
-
-                        if (safeDataModel.getCurrentMission() == null) {
-                            messageButton.setImageResource(R.drawable.aga_zbee_v2_button_left_message_off);
+                        if (monitor.newMessage()) {
+                            messageButton.setImageResource(R.drawable.aga_zbee_v2_button_left_message_new);
                         } else {
-                            if (safeDataModel.haveReadMessage()) {
-                                messageButton.setImageResource(R.drawable.aga_zbee_v2_button_left_message_off);
-                            } else {
-                                messageButton.setImageResource(R.drawable.aga_zbee_v2_button_left_message_new);
-                            }
+                            messageButton.setImageResource(R.drawable.aga_zbee_v2_button_left_message_off);
                         }
+//                        if (safeDataModel.getCurrentMission() == null) {
+//                            messageButton.setImageResource(R.drawable.aga_zbee_v2_button_left_message_off);
+//                        } else {
+//                            if (safeDataModel.haveReadMessage()) {
+//                                messageButton.setImageResource(R.drawable.aga_zbee_v2_button_left_message_off);
+//                            } else {
+//                                messageButton.setImageResource(R.drawable.aga_zbee_v2_button_left_message_new);
+//                            }
+//                        }
                     }
 
                 });
@@ -191,11 +194,16 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
         setupDefroster();
 
         messageButton = (ImageView) activity.findViewById(R.id.messageButton);
-        if (safeDataModel.haveReadMessage()) {
-            messageButton.setImageResource(R.drawable.aga_zbee_v2_button_left_message_off);
-        } else {
+        if (monitor.newMessage()) {
             messageButton.setImageResource(R.drawable.aga_zbee_v2_button_left_message_new);
+        } else {
+            messageButton.setImageResource(R.drawable.aga_zbee_v2_button_left_message_off);
         }
+//        if (safeDataModel.haveReadMessage()) {
+//            messageButton.setImageResource(R.drawable.aga_zbee_v2_button_left_message_off);
+//        } else {
+//            messageButton.setImageResource(R.drawable.aga_zbee_v2_button_left_message_new);
+//        }
         messageButton.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
                 setupViewMessage();
@@ -302,60 +310,84 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
 
         message = (TextView) activity.findViewById(R.id.messageText);
 
-        if (safeDataModel.getCurrentMissionMessage() == null) { //We have no messages
-            acceptButton.setX(5000);
-            cancelButton.setX(5000);
-            doneButton.setX(5000);
-            issueButton.setX(5000);
+        if (monitor.newMessage()) {
+            issueButton.setVisibility(View.INVISIBLE);
+            doneButton.setVisibility(View.INVISIBLE);
+            cancelButton.setVisibility(View.INVISIBLE);
+
+            acceptButton.setOnClickListener(new OnClickListener() {
+                public void onClick(View view) {
+                    monitor.messageRead();
+                    setupViewNormal();
+                }
+            });
+
+            message.setText(monitor.getMessage());
+        } else {
+            acceptButton.setVisibility(View.INVISIBLE);
+            cancelButton.setVisibility(View.INVISIBLE);
+            doneButton.setVisibility(View.INVISIBLE);
+            issueButton.setVisibility(View.INVISIBLE);
 
             message.setText("No messages");
             message.setTextColor(Color.parseColor("#CCCCCC"));
 
-        } else if (safeDataModel.haveReadMessage()) { //We have a message but it is already read
-            acceptButton.setX(5000);
-            cancelButton.setX(5000);
-
-            doneButton.setOnClickListener(new OnClickListener() {
-                public void onClick(View view) {
-                    sendStatusUpdate(SAFEClient.DONE);
-                    safeDataModel.setHaveReadMessage(true);
-                    setupViewNormal();
-                }
-            });
-
-            issueButton.setOnClickListener(new OnClickListener() {
-                public void onClick(View view) {
-                    sendStatusUpdate(SAFEClient.PROBLEM);
-                    safeDataModel.setHaveReadMessage(true);
-                    setupViewNormal();
-                }
-            });
-
-            message.setText(safeDataModel.getCurrentMissionMessage());
-
-        } else { //We have a new message
-            issueButton.setX(5000);
-            doneButton.setX(5000);
-
-            acceptButton.setOnClickListener(new OnClickListener() {
-                public void onClick(View view) {
-                    sendStatusUpdate(SAFEClient.STARTED);
-                    setupViewNormal();
-                    safeDataModel.setHaveReadMessage(true);
-                }
-            });
-
-            cancelButton.setOnClickListener(new OnClickListener() {
-                public void onClick(View view) {
-                    sendStatusUpdate(SAFEClient.PROBLEM);
-                    setupViewNormal();
-                    safeDataModel.setHaveReadMessage(true);
-                }
-            });
-
-
-            message.setText(safeDataModel.getCurrentMissionMessage());
         }
+
+//        if (safeDataModel.getCurrentMissionMessage() == null) { //We have no messages
+//            acceptButton.setX(5000);
+//            cancelButton.setX(5000);
+//            doneButton.setX(5000);
+//            issueButton.setX(5000);
+//
+//            message.setText("No messages");
+//            message.setTextColor(Color.parseColor("#CCCCCC"));
+//
+//        } else if (safeDataModel.haveReadMessage()) { //We have a message but it is already read
+//            acceptButton.setX(5000);
+//            cancelButton.setX(5000);
+//
+//            doneButton.setOnClickListener(new OnClickListener() {
+//                public void onClick(View view) {
+//                    sendStatusUpdate(SAFEClient.DONE);
+//                    safeDataModel.setHaveReadMessage(true);
+//                    setupViewNormal();
+//                }
+//            });
+//
+//            issueButton.setOnClickListener(new OnClickListener() {
+//                public void onClick(View view) {
+//                    sendStatusUpdate(SAFEClient.PROBLEM);
+//                    safeDataModel.setHaveReadMessage(true);
+//                    setupViewNormal();
+//                }
+//            });
+//
+//            message.setText(safeDataModel.getCurrentMissionMessage());
+//
+//        } else { //We have a new message
+//            issueButton.setX(5000);
+//            doneButton.setX(5000);
+//
+//            acceptButton.setOnClickListener(new OnClickListener() {
+//                public void onClick(View view) {
+//                    sendStatusUpdate(SAFEClient.STARTED);
+//                    setupViewNormal();
+//                    safeDataModel.setHaveReadMessage(true);
+//                }
+//            });
+//
+//            cancelButton.setOnClickListener(new OnClickListener() {
+//                public void onClick(View view) {
+//                    sendStatusUpdate(SAFEClient.PROBLEM);
+//                    setupViewNormal();
+//                    safeDataModel.setHaveReadMessage(true);
+//                }
+//            });
+//
+//
+//            message.setText(safeDataModel.getCurrentMissionMessage());
+//        }
 
         updateSpeed();
         updateBattery();

@@ -45,6 +45,8 @@ public class MQTT extends Thread implements CloudPutter {
     private String pass;
     private int interval;
 
+    private ArrayList<String> subscribeTopics;
+
     int qos = 0;// = 2;
 
     private MqttClient client;
@@ -58,12 +60,16 @@ public class MQTT extends Thread implements CloudPutter {
     MqttListener listener = null;
 
     public MQTT(Monitor monitor, Context context) {
+        subscribeTopics = new ArrayList<String>();
         this.monitor = monitor;
         this.context = context;
         database = new ArrayListDatabase();
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo wInfo = wifiManager.getConnectionInfo();
         clientID = wInfo.getMacAddress();
+        subscribeTopics.add(clientID+"/"+"distancePrediction");
+        subscribeTopics.add(clientID+"/"+"message");
+
         //listener = new MqttListener();
         readConfig();
         startIntervalTimer();
@@ -102,13 +108,14 @@ public class MQTT extends Thread implements CloudPutter {
             System.out.println("Connection: " + connected);
             monitor.notifyCloudConnectionResult(connected);
             if (connected){
-                listener = new MqttListener();
-                String topic=clientID+"/"+"distancePrediction";
-                Log.d(LOG_TAG,"topic: "+topic);
-                try {
-                    client.subscribe(topic);
-                } catch (MqttException e) {
-                    e.printStackTrace();
+                listener = new MqttListener(monitor);
+                for (String topic : subscribeTopics) {
+                    Log.d(LOG_TAG,"topic: "+topic);
+                    try {
+                        client.subscribe(topic);
+                    } catch (MqttException e) {
+                        e.printStackTrace();
+                    }
                 }
                 listener.registerActivity(currentActivity);
                 client.setCallback(listener);

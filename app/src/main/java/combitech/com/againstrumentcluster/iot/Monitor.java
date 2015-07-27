@@ -2,6 +2,8 @@ package combitech.com.againstrumentcluster.iot;
 
 import android.util.Log;
 
+import java.util.ArrayList;
+
 /**
  * Created by Fredrik on 2015-06-25.
  */
@@ -43,6 +45,7 @@ public class Monitor {
 
 
     private int lastNetworkChange;
+    private ArrayList<String> messages = new ArrayList<String>();
 
     public Monitor() {
     }
@@ -148,7 +151,7 @@ public class Monitor {
     public synchronized void waitForCloudConnectionAllowance(){
         System.out.println("vï¿½ntar");
         while(!allowedToConnectToCloud){
-            System.out.println("väntar2");
+            System.out.println("vï¿½ntar2");
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -160,7 +163,7 @@ public class Monitor {
 
     public synchronized boolean waitForCloudConnectionResult() {
         while(!connectionAttemptFinished){
-            System.out.println("Jag väntar på att connection result ska vara klart");
+            System.out.println("Jag vï¿½ntar pï¿½ att connection result ska vara klart");
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -219,6 +222,24 @@ public class Monitor {
 
     public synchronized double getLatitude() {
         return latitude;
+    }
+
+    public synchronized boolean newMessage() {
+        if (messages.size() > 0) {
+            return true;
+        }
+        return false;
+    }
+    public synchronized String getMessage() {
+        return messages.get(0);
+    }
+
+    public synchronized void addMessage(String message) {
+        messages.add(message);
+    }
+
+    public synchronized void messageRead() {
+        messages.remove(0);
     }
 
 //    public synchronized float getDistancePrediction() {
