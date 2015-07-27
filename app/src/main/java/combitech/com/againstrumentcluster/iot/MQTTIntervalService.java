@@ -29,7 +29,7 @@ public class MQTTIntervalService extends IntentService {
     protected void onHandleIntent(Intent intent) {
       //  Log.d(LOG_TAG, "intent started");
         if (intent.getAction().equals(ACTION_SYNC)) {
-           // Log.d(LOG_TAG, "Action sync received");
+            Log.d(LOG_TAG, "Action sync received");
             MQTT mqtt = ((MyApplication) getApplicationContext()).getMQTT();
             try {
                 mqtt.sendIntervalData();
