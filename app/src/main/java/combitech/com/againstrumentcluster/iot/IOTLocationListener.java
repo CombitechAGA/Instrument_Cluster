@@ -28,13 +28,13 @@ public class IOTLocationListener implements android.location.LocationListener {
         Location lastKnownLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if (lastKnownLocation != null) {
             Log.d(LOG_TAG, lastKnownLocation.toString());
-            Toast.makeText(mContext, lastKnownLocation.toString(), Toast.LENGTH_LONG).show();
+        //    Toast.makeText(mContext, lastKnownLocation.toString(), Toast.LENGTH_LONG).show();
             mMonitor.setLongitude(lastKnownLocation.getLongitude());
             mMonitor.setLatitude(lastKnownLocation.getLatitude());
         }
         else{
             Log.d(LOG_TAG,"Last known locatin is null");
-            Toast.makeText(mContext, "Last known locatin is null", Toast.LENGTH_LONG).show();
+         //   Toast.makeText(mContext, "Last known locatin is null", Toast.LENGTH_LONG).show();
         }
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
@@ -51,10 +51,12 @@ public class IOTLocationListener implements android.location.LocationListener {
 
         if (location != null) {
             Log.d(LOG_TAG, location.toString());
-            Toast.makeText(mContext, location.toString(), Toast.LENGTH_LONG).show();
+      //      Toast.makeText(mContext, location.toString(), Toast.LENGTH_LONG).show();
+            mMonitor.setLongitude(location.getLongitude());
+            mMonitor.setLatitude(location.getLatitude());
         } else {
             Log.d(LOG_TAG, "Location är null");
-            Toast.makeText(mContext, "Location null", Toast.LENGTH_LONG).show();
+        //    Toast.makeText(mContext, "Location null", Toast.LENGTH_LONG).show();
         }
     }
 

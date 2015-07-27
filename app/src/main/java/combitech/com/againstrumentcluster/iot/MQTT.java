@@ -74,6 +74,7 @@ public class MQTT extends Thread implements CloudPutter {
     }
 
     private void startIntervalTimer() {
+        Log.d(LOG_TAG,"Starting intervalTimer");
         mAlarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, IOTAlarmBroadcastReceiver.class);
         mAlarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
@@ -176,6 +177,7 @@ public class MQTT extends Thread implements CloudPutter {
             user = list.get(3);
             pass = list.get(4);
             interval = Integer.parseInt(list.get(5));
+            Log.d(LOG_TAG,"Interval: "+interval);
 
         }catch (Exception e) {
                 e.printStackTrace();
@@ -191,7 +193,7 @@ public class MQTT extends Thread implements CloudPutter {
             options.setUserName(user);
             options.setPassword(pass.toCharArray());
             client.connect(options);
-
+//            client.connect();
 
             return true;
 
@@ -252,6 +254,7 @@ public class MQTT extends Thread implements CloudPutter {
         if (connected) {
             while (!database.isEmpty()) {
                 CarSnapShot snapShot = database.getLatestSnapshot();
+                System.out.println(snapShot.toString());
                 client.publish("telemetry/snapshot", snapShot.toString().getBytes(), 0, false);
             }
         }
