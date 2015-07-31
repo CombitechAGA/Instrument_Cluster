@@ -50,7 +50,11 @@ public class MqttListener implements MqttCallback {
 
         if (topic.contains("message")) {
             monitor.addMessage(mqttMessage.toString());
-        } else {
+        }
+        else if(topic.contains("config")){
+            Log.d(LOG_TAG,mqttMessage.toString());
+        }
+        else {
 
             if(registeredActivity!=null) {
                 ActivityLayoutManager_v2 layout = ((InstrumentClusterActivity) registeredActivity).getLayoutManager();

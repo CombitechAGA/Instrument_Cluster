@@ -1,6 +1,6 @@
-Broker#tcp://mqtt.phelicks.net:1883
-ClientID#CarID
-qos#2
+Broker#tcp://mqtt.phelicks.net
+port#1883
+interval#10
 User#cab
 Pass#sjuttongubbar
-interval#10
+qos#2

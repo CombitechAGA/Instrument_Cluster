@@ -38,7 +38,7 @@ public class MQTT extends Thread implements CloudPutter {
 
     private String IP; // = "tcp://mqtt.phelicks.net:1883";
     //private static String IP = "tcp://81.236.122.249:1883";
-
+    private String port;
     //Fr�n bilen, hur?
     private String clientID;// = "carID";
     private String user;
@@ -67,8 +67,10 @@ public class MQTT extends Thread implements CloudPutter {
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo wInfo = wifiManager.getConnectionInfo();
         clientID = wInfo.getMacAddress();
+        //ta från configen
         subscribeTopics.add(clientID+"/"+"distancePrediction");
         subscribeTopics.add(clientID+"/"+"message");
+        subscribeTopics.add(clientID+"/"+"config");
 
         //listener = new MqttListener();
         readConfig();
@@ -119,6 +121,7 @@ public class MQTT extends Thread implements CloudPutter {
                 }
                 listener.registerActivity(currentActivity);
                 client.setCallback(listener);
+                requestNewConfig();
 
             }
 
@@ -166,6 +169,15 @@ public class MQTT extends Thread implements CloudPutter {
 
     }
 
+    private void requestNewConfig() {
+        System.out.println("NU SKA JAG REQUESTA EN CONFIG");
+        try {
+            client.publish("request/config", clientID.getBytes(), 0, false);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     public void readConfig() {
@@ -178,16 +190,18 @@ public class MQTT extends Thread implements CloudPutter {
             String line = br.readLine();
             int n = 0;
             while (line != null) {
+                Log.d(LOG_TAG,line);
                 String[] parts = line.split("#");
                 list.add(parts[1]);
                 line = br.readLine();
             }
             IP = list.get(0);
-            //clientID = list.get(1);
-            qos = Integer.parseInt(list.get(2));
+            port = list.get(1);
+            interval = Integer.parseInt(list.get(2));
             user = list.get(3);
             pass = list.get(4);
-            interval = Integer.parseInt(list.get(5));
+            qos = Integer.parseInt(list.get(5));
+
             Log.d(LOG_TAG,"Interval: "+interval);
 
         }catch (Exception e) {
@@ -199,7 +213,7 @@ public class MQTT extends Thread implements CloudPutter {
     public boolean createConnection() {
         try {
 
-            client = new MqttClient(IP, clientID, new MemoryPersistence());
+            client = new MqttClient(IP+":"+port, clientID, new MemoryPersistence());
             MqttConnectOptions options = new MqttConnectOptions();
             options.setUserName(user);
             options.setPassword(pass.toCharArray());
