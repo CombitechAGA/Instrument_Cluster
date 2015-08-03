@@ -26,13 +26,32 @@ public class IOTLocationListener implements android.location.LocationListener {
         Log.d(LOG_TAG, "start");
         mLocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
         Location lastKnownLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Location netLoc = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        Location passLoc = mLocationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
         if (lastKnownLocation != null) {
             System.out.println("Använder GPS");
             Log.d(LOG_TAG, lastKnownLocation.toString());
             Toast.makeText(mContext, lastKnownLocation.toString(), Toast.LENGTH_LONG).show();
             mMonitor.setLongitude(lastKnownLocation.getLongitude());
             mMonitor.setLatitude(lastKnownLocation.getLatitude());
-        } else{
+        }
+        else if (netLoc != null) {
+            System.out.println("Använder network");
+            Log.d(LOG_TAG, netLoc.toString());
+            Toast.makeText(mContext, netLoc.toString(), Toast.LENGTH_LONG).show();
+            mMonitor.setLongitude(netLoc.getLongitude());
+            mMonitor.setLatitude(netLoc.getLatitude());
+
+        }
+        else if (passLoc != null) {
+            System.out.println("Använder network");
+            Log.d(LOG_TAG, passLoc.toString());
+            Toast.makeText(mContext, netLoc.toString(), Toast.LENGTH_LONG).show();
+            mMonitor.setLongitude(netLoc.getLongitude());
+            mMonitor.setLatitude(netLoc.getLatitude());
+
+        }
+        else{
             Log.d(LOG_TAG,"Last known locatin is null");
             Toast.makeText(mContext, "Last known locatin is null", Toast.LENGTH_LONG).show();
         }

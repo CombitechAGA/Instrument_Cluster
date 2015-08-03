@@ -129,11 +129,11 @@
 
         <Button
             android:id="@+id/acceptButton"
-            android:layout_width="100px"
-            android:layout_height="100px"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:background="@drawable/aga_zbee_accept_icon"
-            android:layout_marginTop="600px"
-            android:layout_marginLeft="170px" />
+            android:layout_marginTop="400dp"
+            android:layout_marginLeft="470px" />
 
         <Button
             android:id="@+id/cancelButton"
@@ -178,12 +178,12 @@
 
         <ImageView
             android:id="@+id/backIcon"
-            android:layout_width="210px"
-            android:layout_height="210px"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:background="@drawable/aga_zbee_v2_button_left_back_off"
-            android:layout_marginBottom="40px"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"/>
+            android:layout_marginTop="360dp"/>
+        <!--android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"-->
 
     </RelativeLayout>
 

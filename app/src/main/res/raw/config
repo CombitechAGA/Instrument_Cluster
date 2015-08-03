@@ -1,4 +1,4 @@
-Broker#tcp://mqtt.phelicks.net
+Broker#mqtt.phelicks.net
 port#1883
 interval#10
 User#cab

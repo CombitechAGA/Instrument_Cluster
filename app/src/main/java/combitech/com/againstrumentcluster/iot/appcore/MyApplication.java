@@ -1,6 +1,7 @@
 package combitech.com.againstrumentcluster.iot.appcore;
 
 import android.app.Application;
+import android.content.Context;
 import android.location.LocationListener;
 import android.location.LocationManager;
 
@@ -16,10 +17,12 @@ public class MyApplication extends Application {
     private MQTT mCloudPutter;
     private Monitor mMonitor;
     IOTLocationListener mIOTLocationListener;
+    private static Context context;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        MyApplication.context = getApplicationContext();
 
         mMonitor = new Monitor();
         mCloudPutter = new MQTT(mMonitor, this);
@@ -44,5 +47,9 @@ public class MyApplication extends Application {
     }
     public MQTT getMQTT(){
         return mCloudPutter;
+    }
+
+    public static Context getAppContext(){
+        return MyApplication.context;
     }
 }

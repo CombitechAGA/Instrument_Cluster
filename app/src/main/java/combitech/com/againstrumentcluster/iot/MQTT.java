@@ -17,12 +17,16 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import combitech.com.againstrumentcluster.InstrumentClusterActivity;
 import combitech.com.againstrumentcluster.R;
+import combitech.com.againstrumentcluster.iot.appcore.MyApplication;
 
 /**
  * Created by Fredrik on 2015-06-23.
@@ -182,7 +186,23 @@ public class MQTT extends Thread implements CloudPutter {
     @Override
     public void readConfig() {
         //f�r att l�sa in ip, qos, topics osv.
-        InputStream is = context.getResources().openRawResource(R.raw.config);
+
+        File file = new File(MyApplication.getAppContext().getFilesDir(), "config.txt");
+        InputStream is;
+        if (file.exists()){
+            System.out.println("Det finns en fil på disk yay");
+            is = null;
+            try {
+                is = new FileInputStream(file);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            System.out.println("Det finns ingen  fil på disk :(");
+            is = context.getResources().openRawResource(R.raw.config);
+
+        }
         BufferedReader br;
         ArrayList<String> list = new ArrayList<String>();
         try {
@@ -190,23 +210,23 @@ public class MQTT extends Thread implements CloudPutter {
             String line = br.readLine();
             int n = 0;
             while (line != null) {
-                Log.d(LOG_TAG,line);
+                Log.d(LOG_TAG, line);
                 String[] parts = line.split("#");
                 list.add(parts[1]);
                 line = br.readLine();
             }
-            IP = list.get(0);
+            IP = "tcp://" + list.get(0);
             port = list.get(1);
             interval = Integer.parseInt(list.get(2));
             user = list.get(3);
             pass = list.get(4);
             qos = Integer.parseInt(list.get(5));
 
-            Log.d(LOG_TAG,"Interval: "+interval);
+            Log.d(LOG_TAG, "Interval: " + interval);
 
-        }catch (Exception e) {
-                e.printStackTrace();
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

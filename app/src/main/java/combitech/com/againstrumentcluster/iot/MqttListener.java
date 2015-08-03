@@ -1,6 +1,8 @@
 package combitech.com.againstrumentcluster.iot;
 
 import android.app.Activity;
+import android.app.Application;
+import android.content.Context;
 import android.content.SyncStatusObserver;
 import android.util.Log;
 
@@ -8,8 +10,15 @@ import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+
 import combitech.com.againstrumentcluster.ActivityLayoutManager_v2;
 import combitech.com.againstrumentcluster.InstrumentClusterActivity;
+import combitech.com.againstrumentcluster.iot.appcore.MyApplication;
 
 /**
  * Created by Fredrik on 2015-07-03.
@@ -52,7 +61,14 @@ public class MqttListener implements MqttCallback {
             monitor.addMessage(mqttMessage.toString());
         }
         else if(topic.contains("config")){
-            Log.d(LOG_TAG,mqttMessage.toString());
+
+            File file = new File(MyApplication.getAppContext().getFilesDir(), "config.txt");
+            BufferedWriter bWriter = new BufferedWriter(new FileWriter(file));
+            bWriter.write(mqttMessage.toString());
+            bWriter.flush();
+            bWriter.close();
+
+            Log.d(LOG_TAG, mqttMessage.toString());
         }
         else {
 
