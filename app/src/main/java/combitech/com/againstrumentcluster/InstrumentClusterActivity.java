@@ -141,10 +141,14 @@ public class InstrumentClusterActivity extends Activity {
         registerReceiver(networkStateReceiver, intentFilter);
 
     }
+
+
+
+
     @Override
     public void onPause(){
         System.out.println("nu körs on pause");
-        super.onStop();
+        super.onPause();
     }
 
     @Override
@@ -159,10 +163,32 @@ public class InstrumentClusterActivity extends Activity {
                 manager.unregister(AutomotiveSignalId.FMS_HIGH_RESOLUTION_TOTAL_VEHICLE_DISTANCE);
             }
         }).start();
-        if (mAlarmMgr != null) {
-            mAlarmMgr.cancel(mAlarmIntent);
-        }
+//        if (mAlarmMgr != null) {
+//            mAlarmMgr.cancel(mAlarmIntent);
+//        }
+        ((MyApplication) getApplicationContext()).getIOTLocationListener().stop();
+        mMqtt.stopInterevalTimer();
         super.onDestroy();
+    }
+
+    @Override
+    protected void onStop(){
+        System.out.println("nu körs onstop");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                manager.unregister(AutomotiveSignalId.FMS_WHEEL_BASED_SPEED);
+                manager.unregister(AutomotiveSignalId.FMS_FUEL_LEVEL_1);
+                manager.unregister(AutomotiveSignalId.FMS_FUEL_RATE);
+                manager.unregister(AutomotiveSignalId.FMS_HIGH_RESOLUTION_TOTAL_VEHICLE_DISTANCE);
+            }
+        }).start();
+//        if (mAlarmMgr != null) {
+//            mAlarmMgr.cancel(mAlarmIntent);
+//        }
+        ((MyApplication) getApplicationContext()).getIOTLocationListener().stop();
+        mMqtt.stopInterevalTimer();
+        super.onStop();
     }
 
     @Override

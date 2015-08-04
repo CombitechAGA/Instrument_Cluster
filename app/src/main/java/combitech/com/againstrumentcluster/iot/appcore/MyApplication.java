@@ -5,6 +5,9 @@ import android.content.Context;
 import android.location.LocationListener;
 import android.location.LocationManager;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+
 import combitech.com.againstrumentcluster.iot.IOTLocationListener;
 import combitech.com.againstrumentcluster.iot.MQTT;
 import combitech.com.againstrumentcluster.iot.Monitor;
@@ -18,7 +21,6 @@ public class MyApplication extends Application {
     private Monitor mMonitor;
     IOTLocationListener mIOTLocationListener;
     private static Context context;
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -30,7 +32,11 @@ public class MyApplication extends Application {
         mIOTLocationListener = new IOTLocationListener(this,mMonitor);
         mIOTLocationListener.start();
 
+
+
     }
+
+
 
     @Override
     public void onTerminate() {
@@ -42,13 +48,17 @@ public class MyApplication extends Application {
 
 
 
+
+
     public Monitor getMonitor() {
         return mMonitor;
     }
     public MQTT getMQTT(){
         return mCloudPutter;
     }
-
+    public IOTLocationListener getIOTLocationListener(){
+        return mIOTLocationListener;
+    }
     public static Context getAppContext(){
         return MyApplication.context;
     }

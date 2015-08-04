@@ -84,7 +84,7 @@ public class ConnectionStatusThread extends Thread {
 //                        });
 //
 //                    }
-                    System.out.println("Nu ska du försöka connecta här från connection ");
+                    System.out.println("Nu ska du forsoka connecta har fran connection ");
                     tryToConnect();
                     break;
 
@@ -107,7 +107,7 @@ public class ConnectionStatusThread extends Thread {
     }
 
     private void tryToConnect(){
-        System.out.println("Nu fï¿½rsï¿½ker jag connecta");
+        System.out.println("Nu forsaker jag connecta");
         monitor.notifyCloudConnection();
         boolean connected = monitor.waitForCloudConnectionResult();
         updateConnectionButton(connected);

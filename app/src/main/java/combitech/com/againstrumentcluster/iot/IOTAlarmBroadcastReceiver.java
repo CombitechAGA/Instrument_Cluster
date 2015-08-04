@@ -31,7 +31,7 @@ public class IOTAlarmBroadcastReceiver extends BroadcastReceiver {
 
 
         //skriv ner datan med en asynctask
-        //intentservice som får ut montior och mqtt och skickar ut datan.
+        //intentservice som far ut montior och mqtt och skickar ut datan.
 
 //        Monitor monitor =app.getMonitor();
 //        monitor.testPrint();
