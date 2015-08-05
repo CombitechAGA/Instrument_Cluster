@@ -61,6 +61,7 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
     private boolean isBlinkingRightOn;
     private boolean isHazardOn;
     private boolean isMessageView;
+    private boolean isMapView;
 
     private boolean isDefrosting;
     private boolean isHazard;
@@ -75,6 +76,7 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
     private Monitor monitor;
     public float lastRange;
     private String LOG_TAG = ActivityLayoutManager_v2.class.getSimpleName();
+
 
     public ActivityLayoutManager_v2(final InstrumentClusterActivity activity, final VehicleDataModel vehicleDataModel, final SAFEDataModel safeDataModel, final SAFEClient safeClient, final Monitor monitor) {
         super(activity);
@@ -241,6 +243,158 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
 
             }
         });
+    }
+
+    public void setupMapView() {
+        activity.setContentView(R.layout.aga_zbee_map_v2);
+        batteryPercentage = (TextView) activity.findViewById(R.id.percentageBattery);
+        speedNumber = (TextView) activity.findViewById(R.id.speedNumber);
+        batteryRangeView = (BatteryRangeView) activity.findViewById(R.id.batteryAndRange);
+        odometer = (TextView) activity.findViewById(R.id.tripMeter);
+        energyGlow = (ImageView) activity.findViewById(R.id.energyGlow);
+
+        leftBlinkerGlow = (ImageView) activity.findViewById(R.id.blinkerGlowLeft);
+        rightBlinkerGlow = (ImageView) activity.findViewById(R.id.blinkerGlowRight);
+        telltaleBlinkers = (ImageView) activity.findViewById(R.id.telltaleBlinker);
+        clock = (TextView) activity.findViewById(R.id.clockCluster);
+        clock.setText(new SimpleDateFormat("HH:mm").format(new Date()).toString());
+
+        if (isBlinkingRightOn) {
+            rightBlinkerGlow.setAlpha(1.0f);
+            telltaleBlinkers.setAlpha(1.0f);
+        } else {
+            rightBlinkerGlow.setAlpha(0.0f);
+            telltaleBlinkers.setAlpha(0.0f);
+        }
+
+        if (isBlinkingLeftOn) {
+            leftBlinkerGlow.setAlpha(1.0f);
+            telltaleBlinkers.setAlpha(1.0f);
+        } else {
+            leftBlinkerGlow.setAlpha(0.0f);
+            telltaleBlinkers.setAlpha(0.0f);
+        }
+
+        telltaleHazard = (ImageView) activity.findViewById(R.id.telltaleWarning);
+
+        if (isHazardOn()) {
+            telltaleHazard.setAlpha(1.0f);
+        } else {
+            telltaleHazard.setAlpha(0.0f);
+        }
+
+        telltaleDefroster = (ImageView) activity.findViewById(R.id.telltaleDefrost);
+
+        if (isDefrosting()) {
+            telltaleDefroster.setAlpha(1.0f);
+        } else {
+            telltaleDefroster.setAlpha(0.0f);
+        }
+
+
+        cancelButton = (Button) activity.findViewById(R.id.cancelButton);
+        acceptButton = (Button) activity.findViewById(R.id.acceptButton);
+        doneButton = (Button) activity.findViewById(R.id.doneButton);
+        issueButton = (Button) activity.findViewById(R.id.issueButton);
+
+        issueButton.setText("Issue");
+        issueButton.setTextSize(25f);
+        doneButton.setText("Done");
+        doneButton.setTextSize(25f);
+
+        backIcon = (ImageView) activity.findViewById(R.id.backIcon);
+        backIcon.setOnClickListener(new OnClickListener() {
+            public void onClick(View view) {
+                setupViewNormal();
+            }
+        });
+
+        message = (TextView) activity.findViewById(R.id.messageText);
+
+        if (monitor.newMessage()) {
+            issueButton.setVisibility(View.INVISIBLE);
+            doneButton.setVisibility(View.INVISIBLE);
+            cancelButton.setVisibility(View.INVISIBLE);
+
+            acceptButton.setOnClickListener(new OnClickListener() {
+                public void onClick(View view) {
+                    monitor.messageRead();
+                    setupViewNormal();
+                }
+            });
+
+            message.setText(monitor.getMessage());
+        } else {
+            acceptButton.setVisibility(View.INVISIBLE);
+            cancelButton.setVisibility(View.INVISIBLE);
+            doneButton.setVisibility(View.INVISIBLE);
+            issueButton.setVisibility(View.INVISIBLE);
+
+            message.setText("No messages");
+            message.setTextColor(Color.parseColor("#CCCCCC"));
+
+        }
+
+//        if (safeDataModel.getCurrentMissionMessage() == null) { //We have no messages
+//            acceptButton.setX(5000);
+//            cancelButton.setX(5000);
+//            doneButton.setX(5000);
+//            issueButton.setX(5000);
+//
+//            message.setText("No messages");
+//            message.setTextColor(Color.parseColor("#CCCCCC"));
+//
+//        } else if (safeDataModel.haveReadMessage()) { //We have a message but it is already read
+//            acceptButton.setX(5000);
+//            cancelButton.setX(5000);
+//
+//            doneButton.setOnClickListener(new OnClickListener() {
+//                public void onClick(View view) {
+//                    sendStatusUpdate(SAFEClient.DONE);
+//                    safeDataModel.setHaveReadMessage(true);
+//                    setupViewNormal();
+//                }
+//            });
+//
+//            issueButton.setOnClickListener(new OnClickListener() {
+//                public void onClick(View view) {
+//                    sendStatusUpdate(SAFEClient.PROBLEM);
+//                    safeDataModel.setHaveReadMessage(true);
+//                    setupViewNormal();
+//                }
+//            });
+//
+//            message.setText(safeDataModel.getCurrentMissionMessage());
+//
+//        } else { //We have a new message
+//            issueButton.setX(5000);
+//            doneButton.setX(5000);
+//
+//            acceptButton.setOnClickListener(new OnClickListener() {
+//                public void onClick(View view) {
+//                    sendStatusUpdate(SAFEClient.STARTED);
+//                    setupViewNormal();
+//                    safeDataModel.setHaveReadMessage(true);
+//                }
+//            });
+//
+//            cancelButton.setOnClickListener(new OnClickListener() {
+//                public void onClick(View view) {
+//                    sendStatusUpdate(SAFEClient.PROBLEM);
+//                    setupViewNormal();
+//                    safeDataModel.setHaveReadMessage(true);
+//                }
+//            });
+//
+//
+//            message.setText(safeDataModel.getCurrentMissionMessage());
+//        }
+
+        updateSpeed();
+        updateBattery();
+        //updateRange();
+        batteryRangeView.setRangePercentageFilled(lastRange);
+        updateOdometer();
     }
 
     public void setupViewMessage() {
