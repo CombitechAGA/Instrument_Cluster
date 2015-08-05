@@ -17,7 +17,10 @@ import android.support.v4.app.Fragment;
 import com.combitech.safe.SAFEClient;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.support.v4.app.FragmentManager;
 
@@ -29,7 +32,7 @@ import combitech.com.againstrumentcluster.iot.Monitor;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
-public class ActivityLayoutManager_v2 extends RelativeLayout {
+public class ActivityLayoutManager_v2 extends RelativeLayout implements OnMapReadyCallback {
 
     private BatteryRangeView batteryRangeView;
     private Timer leftBlinkersTimer;
@@ -265,14 +268,15 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
     public void setupMapView() {
 
         activity.setContentView(R.layout.aga_zbee_map_v2);
-//        GoogleMap googleMap;
+        GoogleMap googleMap;
 //        fragment = ((MapFragment) activity.getFragmentManager().findFragmentById(R.id.map));
         fragment = SupportMapFragment.newInstance();
         FragmentManager     fm = activity.getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.map, (Fragment) fragment);
+        ft.replace(R.id.map, fragment);
         ft.commit();
 
+        fragment.getMapAsync(this);
         batteryPercentage = (TextView) activity.findViewById(R.id.percentageBattery);
         speedNumber = (TextView) activity.findViewById(R.id.speedNumber);
         batteryRangeView = (BatteryRangeView) activity.findViewById(R.id.batteryAndRange);
@@ -800,5 +804,16 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
             System.out.println("Jag var visst null null");
         }
         connectionButton.setClickable(true);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        googleMap.setMyLocationEnabled(true);
+        googleMap.addMarker(new MarkerOptions()
+                .title("Sydney")
+                .snippet("The most populous city in Australia.")
+                .position());
+
+
     }
 }
