@@ -1,221 +1,229 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent">
 
 
-<!--Main Background-->
-<RelativeLayout
-    android:id="@+id/mainBackground"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:background="@drawable/aga_zbee_v2_main_background">
+    <!--Main Background-->
+    <RelativeLayout
+        android:id="@+id/mainBackground"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:background="@drawable/aga_zbee_v2_main_background">
 
-    <ImageView
-        android:id="@+id/blinkerGlowLeft"
-        android:background="@drawable/aga_zbee_v2_glow_blink_left"
-        android:layout_width="80px"
-        android:layout_height="800px"
+        <ImageView
+            android:id="@+id/blinkerGlowLeft"
+            android:background="@drawable/aga_zbee_v2_glow_blink_left"
+            android:layout_width="80px"
+            android:layout_height="800px"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"/>
+
+
+        <ImageView
+            android:id="@+id/blinkerGlowRight"
+            android:background="@drawable/aga_zbee_v2_glow_blink_right"
+            android:layout_width="80px"
+            android:layout_height="800px"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"/>
+
+
+    </RelativeLayout>
+
+
+
+    <!--Top Bar-->
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:layout_width="1840px"
+        android:layout_height="48px"
+        android:layout_marginTop="40px"
+        android:layout_marginLeft="40px">
+
+        <TextView
+            android:id="@+id/clockCluster"
+            android:layout_width="155px"
+            android:layout_height="wrap_content"
+            android:text="16:00"
+            android:textSize="45px"
+            android:gravity="center"
+            android:textColor="#b3b3b3"
+            android:layout_alignParentRight="true"/>
+
+        <ImageView
+            android:id="@+id/signalInternet"
+            android:layout_width="48px"
+            android:layout_height="48px"
+            android:background="@drawable/aga_zbee_v2_telltale_internet"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="155px"/>
+
+        <ImageView
+            android:id="@+id/signalGps"
+            android:layout_width="48px"
+            android:layout_height="48px"
+            android:background="@drawable/aga_zbee_v2_telltale_gps"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="213px"/>
+
+        <ImageView
+            android:id="@+id/telltaleWarning"
+            android:layout_width="48px"
+            android:layout_height="48px"
+            android:background="@drawable/aga_zbee_v2_telltale_warning"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="271px"/>
+
+        <ImageView
+            android:id="@+id/telltaleDefrost"
+            android:layout_width="48px"
+            android:layout_height="48px"
+            android:background="@drawable/aga_zbee_v2_telltale_defrost"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="329px"/>
+
+        <ImageView
+            android:id="@+id/telltaleBlinker"
+            android:layout_width="48px"
+            android:layout_height="48px"
+            android:background="@drawable/aga_zbee_v2_telltale_blinker"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="387px"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="760px"
+        android:layout_height="1072px"
         android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"/>
+        android:layout_marginRight="80px"
+        android:layout_marginLeft="80px"
+        android:layout_marginTop="66px">
+
+        <fragment
+            android:id="@+id/map"
+            class ="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
 
-    <ImageView
-        android:id="@+id/blinkerGlowRight"
-        android:background="@drawable/aga_zbee_v2_glow_blink_right"
-        android:layout_width="80px"
-        android:layout_height="800px"
+
+        <ImageView
+            android:id="@+id/backIcon"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/aga_zbee_v2_button_left_back_off"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20px"
+            />
+
+
+    </RelativeLayout>
+
+    <!--Cluster-->
+    <RelativeLayout
+        android:id="@+id/clusterContainer"
+        android:layout_width="1072px"
+        android:layout_height="1072px"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"/>
+        android:layout_marginRight="80px"
+        android:layout_marginTop="66px">
 
+        <ImageView
+            android:id="@+id/clusterHole"
+            android:layout_width="928px"
+            android:layout_height="928px"
+            android:background="@drawable/aga_zbee_v2_cluster_background"
+            android:layout_centerInParent="true"/>
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/speedNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="45"
+            android:textSize="450px"
+            android:textColor="#ffffff"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="210px"
+            android:shadowColor="#000000"
+            android:shadowDx="-1"
+            android:shadowDy="-1"
+            android:shadowRadius="1"/>
 
+        <TextView
+            android:id="@+id/speedValue"
+            android:layout_width="470px"
+            android:layout_height="90px"
+            android:text="km / h"
+            android:textSize="80px"
+            android:textColor="#ffffff"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/speedNumber"
+            android:shadowColor="#000000"
+            android:shadowDx="-1"
+            android:shadowDy="-1"
+            android:shadowRadius="1"
+            android:layout_marginTop="-60px"/>
 
+        <TextView
+            android:id="@+id/tripMeter"
+            android:layout_width="470px"
+            android:layout_height="70px"
+            android:textSize="44px"
+            android:textColor="#999999"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/speedNumber"
+            android:layout_marginBottom="-230px"/>
 
-<!--Top Bar-->
-<RelativeLayout
-    android:id="@+id/topBar"
-    android:layout_width="1840px"
-    android:layout_height="48px"
-    android:layout_marginTop="40px"
-    android:layout_marginLeft="40px">
+        <ImageView
+            android:id="@+id/batteryBackgroundEmpty"
+            android:layout_width="162px"
+            android:layout_height="78px"
+            android:background="@drawable/aga_zbee_v2_battery_empty"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="794px"/>
 
-    <TextView
-        android:id="@+id/clockCluster"
-        android:layout_width="155px"
-        android:layout_height="wrap_content"
-        android:text="16:00"
-        android:textSize="45px"
-        android:gravity="center"
-        android:textColor="#b3b3b3"
-        android:layout_alignParentRight="true"/>
+        <ImageView
+            android:id="@+id/energyGlow"
+            android:layout_width="114px"
+            android:layout_height="460px"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="880px"/>
 
-    <ImageView
-        android:id="@+id/signalInternet"
-        android:layout_width="48px"
-        android:layout_height="48px"
-        android:background="@drawable/aga_zbee_v2_telltale_internet"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="155px"/>
+        <ImageView
+            android:id="@+id/batteryBackgroundFull"
+            android:layout_width="162px"
+            android:layout_height="78px"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="794px"/>
+        <TextView
+            android:id="@+id/percentageBattery"
+            android:layout_width="162px"
+            android:layout_height="78px"
+            android:text="100%"
+            android:textSize="50px"
+            android:textColor="#ffffff"
+            android:shadowColor="#000000"
+            android:shadowDx="-1"
+            android:shadowDy="-1"
+            android:shadowRadius="1"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="800px"/>
+        <view
+            android:layout_width="1000dp"
+            android:layout_height="1000dp"
+            class="combitech.com.againstrumentcluster.BatteryRangeView"
+            android:id="@+id/batteryAndRange"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"/>
 
-    <ImageView
-        android:id="@+id/signalGps"
-        android:layout_width="48px"
-        android:layout_height="48px"
-        android:background="@drawable/aga_zbee_v2_telltale_gps"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="213px"/>
-
-    <ImageView
-        android:id="@+id/telltaleWarning"
-        android:layout_width="48px"
-        android:layout_height="48px"
-        android:background="@drawable/aga_zbee_v2_telltale_warning"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="271px"/>
-
-    <ImageView
-        android:id="@+id/telltaleDefrost"
-        android:layout_width="48px"
-        android:layout_height="48px"
-        android:background="@drawable/aga_zbee_v2_telltale_defrost"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="329px"/>
-
-    <ImageView
-        android:id="@+id/telltaleBlinker"
-        android:layout_width="48px"
-        android:layout_height="48px"
-        android:background="@drawable/aga_zbee_v2_telltale_blinker"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="387px"/>
-
-</RelativeLayout>
-
-<!--Left Bar-->
-<RelativeLayout
-    android:id="@+id/leftBar"
-    android:layout_width="261px"
-    android:layout_height="1024px"
-    android:layout_marginTop="88px"
-    android:layout_marginLeft="40px"
-    android:layout_alignParentLeft="true">
-
-
-    <ImageView
-        android:id="@+id/backIcon"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:background="@drawable/aga_zbee_v2_button_left_back_off"
-        android:layout_marginTop="360dp"/>
-    <!--android:layout_alignParentLeft="true"
-    android:layout_alignParentBottom="true"-->
-
-</RelativeLayout>
-
-<!--Cluster-->
-<RelativeLayout
-    android:id="@+id/clusterContainer"
-    android:layout_width="1072px"
-    android:layout_height="1172px"
-    android:layout_alignParentRight="true"
-    android:layout_marginRight="80px"
-    android:layout_marginTop="66px">
-
-    <ImageView
-        android:id="@+id/clusterHole"
-        android:layout_width="728px"
-        android:layout_height="728px"
-        android:background="@drawable/aga_zbee_v2_cluster_background"
-        android:layout_centerInParent="true"/>
-
-    <TextView
-        android:id="@+id/speedNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="45"
-        android:textSize="250px"
-        android:textColor="#ffffff"
-        android:gravity="center"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="210px"
-        android:shadowColor="#000000"
-        android:shadowDx="-1"
-        android:shadowDy="-1"
-        android:shadowRadius="1"/>
-
-    <TextView
-        android:id="@+id/speedValue"
-        android:layout_width="270px"
-        android:layout_height="90px"
-        android:text="km / h"
-        android:textSize="70px"
-        android:textColor="#ffffff"
-        android:gravity="center"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/speedNumber"
-        android:shadowColor="#000000"
-        android:shadowDx="-1"
-        android:shadowDy="-1"
-        android:shadowRadius="1"
-        android:layout_marginTop="-60px"/>
-
-    <TextView
-        android:id="@+id/tripMeter"
-        android:layout_width=" 250px"
-        android:layout_height="70px"
-        android:textSize="44px"
-        android:textColor="#999999"
-        android:gravity="center"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@+id/speedNumber"
-        android:layout_marginBottom="-230px"/>
-
-    <ImageView
-        android:id="@+id/batteryBackgroundEmpty"
-        android:layout_width="162px"
-        android:layout_height="78px"
-        android:background="@drawable/aga_zbee_v2_battery_empty"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="600px"/>
-
-    <ImageView
-        android:id="@+id/energyGlow"
-        android:layout_width="114px"
-        android:layout_height="460px"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="650px"/>
-
-    <ImageView
-        android:id="@+id/batteryBackgroundFull"
-        android:layout_width="162px"
-        android:layout_height="78px"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="650px"/>
-    <TextView
-        android:id="@+id/percentageBattery"
-        android:layout_width="162px"
-        android:layout_height="78px"
-        android:text="100%"
-        android:textSize="50px"
-        android:textColor="#ffffff"
-        android:shadowColor="#000000"
-        android:shadowDx="-1"
-        android:shadowDy="-1"
-        android:shadowRadius="1"
-        android:gravity="center"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="650px"/>
-     <view
-        android:layout_width="1000dp"
-        android:layout_height="1000dp"
-        class="combitech.com.againstrumentcluster.BatteryRangeView"
-        android:id="@+id/batteryAndRange"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"/>
-
-</RelativeLayout>
+    </RelativeLayout>
 
 
 

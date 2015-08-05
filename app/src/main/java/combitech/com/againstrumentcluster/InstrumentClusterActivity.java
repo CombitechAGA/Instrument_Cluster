@@ -9,6 +9,8 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
 import android.swedspot.automotive.AutomotiveManager;
 import android.swedspot.automotiveapi.AutomotiveSignal;
 import android.swedspot.automotiveapi.AutomotiveSignalId;
@@ -27,7 +29,7 @@ import combitech.com.againstrumentcluster.iot.NetworkStateReceiver;
 import combitech.com.againstrumentcluster.iot.appcore.MyApplication;
 import combitech.com.againstrumentcluster.iot.IOTAlarmBroadcastReceiver;
 
-public class InstrumentClusterActivity extends Activity {
+public class InstrumentClusterActivity extends FragmentActivity {
 
     private static final String LOG_TAG = InstrumentClusterActivity.class.getSimpleName();
     private static AutomotiveManager manager;
@@ -43,7 +45,11 @@ public class InstrumentClusterActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.aga_zbee_main_v2);
         SAFEClientRunnable updateRunnable = new SAFEClientRunnable(safeClient, safeDataModel, vehicleDataModel);
         new Thread(updateRunnable).start();
 

@@ -284,6 +284,14 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true" />
 
+        <ImageView
+            android:id = "@+id/mapButton"
+            android:layout_width="110px"
+            android:layout_height="110px"
+            android:background="@drawable/aga_zbee_v2_button_left_blinker_off"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true" />
+
 
     </RelativeLayout>
 

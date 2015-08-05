@@ -25,4 +25,5 @@ dependencies {
     compile files('libs/org.eclipse.paho.client.mqttv3-1.0.2.jar')
     compile files('libs/org.eclipse.paho.android.service-1.0.3-20150620.041150-108.jar')
     compile 'com.google.android.gms:play-services:7.5.0'
+    compile 'com.android.support:support-v4:22.2.1'
 }
