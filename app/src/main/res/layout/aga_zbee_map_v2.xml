@@ -101,11 +101,11 @@
         android:layout_marginLeft="80px"
         android:layout_marginTop="66px">
 
-        <fragment
+        <FrameLayout
             android:id="@+id/map"
-            class ="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
+            <!--class ="com.google.android.gms.maps.SupportMapFragment"-->
 
 
 

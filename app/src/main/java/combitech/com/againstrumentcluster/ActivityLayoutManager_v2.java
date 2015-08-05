@@ -3,6 +3,7 @@ package combitech.com.againstrumentcluster;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -12,9 +13,12 @@ import android.widget.TextView;
 
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.Fragment;
+
 import com.combitech.safe.SAFEClient;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.SupportMapFragment;
+
 import android.support.v4.app.FragmentManager;
 
 import java.io.IOException;
@@ -60,7 +64,7 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
     private TextView message;
     private TextView clock;
 
-    private MapFragment fragment;
+    private SupportMapFragment fragment;
 
     private boolean isBlinkingLeft;
     private boolean isBlinkingLeftOn;
@@ -91,7 +95,7 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
         this.vehicleDataModel = vehicleDataModel;
         this.safeDataModel = safeDataModel;
         this.safeClient = safeClient;
-        this.monitor=monitor;
+        this.monitor = monitor;
 
         leftBlinkersTimer = new Timer(new Runnable() {
             @Override
@@ -149,7 +153,7 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
                 });
             }
         }, 12000);//Should be 2 minutes (120 000)but set to 12s for testing purposes
-        lastRange=vehicleDataModel.getBatteryLevel();
+        lastRange = vehicleDataModel.getBatteryLevel();
         setupViewNormal();
         updateGUITimer = new Timer(new Runnable() {
             @Override
@@ -231,7 +235,7 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
         batteryRangeView.setRangePercentageFilled(lastRange);
         updateOdometer();
 
-        if (connected){
+        if (connected) {
             ImageView connectionButton = (ImageView) activity.findViewById(R.id.connectionButton);
             connectionButton.setImageResource(R.drawable.aga_zbee_v2_button_connection_on);
         }
@@ -257,14 +261,19 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
             }
         });
     }
-        public void setupMapView() {
-                //activity.setContentView(
-                    int myint =    R.layout.aga_zbee_map_v2;
-                //);
-            //GoogleMap googleMap;
-            fragment =((MapFragment) activity.getFragmentManager().findFragmentById(R.id.map));
 
-            batteryPercentage = (TextView) activity.findViewById(R.id.percentageBattery);
+    public void setupMapView() {
+
+        activity.setContentView(R.layout.aga_zbee_map_v2);
+//        GoogleMap googleMap;
+//        fragment = ((MapFragment) activity.getFragmentManager().findFragmentById(R.id.map));
+        fragment = SupportMapFragment.newInstance();
+        FragmentManager     fm = activity.getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.map, (Fragment) fragment);
+        ft.commit();
+
+        batteryPercentage = (TextView) activity.findViewById(R.id.percentageBattery);
         speedNumber = (TextView) activity.findViewById(R.id.speedNumber);
         batteryRangeView = (BatteryRangeView) activity.findViewById(R.id.batteryAndRange);
         odometer = (TextView) activity.findViewById(R.id.tripMeter);
@@ -652,12 +661,13 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
     }
 
 
-    public void updateRangeOnline(float batteryLevel){
+    public void updateRangeOnline(float batteryLevel) {
         batteryRangeView.setRangePercentageFilled(batteryLevel);
     }
+
     public void updateRange() {
-        Log.d(LOG_TAG,"BatteryLevel: "+vehicleDataModel.getBatteryLevel());
-        if(!connected){
+        Log.d(LOG_TAG, "BatteryLevel: " + vehicleDataModel.getBatteryLevel());
+        if (!connected) {
 
             batteryRangeView.setRangePercentageFilled(vehicleDataModel.getBatteryLevel());
         }
@@ -666,15 +676,13 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
 //
 //
 //        }
-       // if(monitor.isConnectedToCloud()) {
+        // if(monitor.isConnectedToCloud()) {
 //          if(connected){
 //            batteryRangeView.setRangePercentageFilled(vehicleDataModel.getBatteryLevel()-0.1f);
 //        } else {
 //            batteryRangeView.setRangePercentageFilled(vehicleDataModel.getBatteryLevel());
 //        }
     }
-
-
 
 
     public void updateOdometer() {
@@ -779,17 +787,16 @@ public class ActivityLayoutManager_v2 extends RelativeLayout {
 
     public void setConnectionStatus(boolean status) {
         connected = status;
-       // ImageView connectionButton = (ImageView) activity.findViewById(R.id.connectionButton);
+        // ImageView connectionButton = (ImageView) activity.findViewById(R.id.connectionButton);
         //borde kanske g�ras p� n�got annat s�tt
-        if(connectionButton!=null) {
+        if (connectionButton != null) {
             if (connected) {
                 connectionButton.setImageResource(R.drawable.aga_zbee_v2_button_connection_on);
             } else {
                 connectionButton.setImageResource(R.drawable.aga_zbee_v2_button_connection_off);
             }
             updateRange();
-        }
-        else{
+        } else {
             System.out.println("Jag var visst null null");
         }
         connectionButton.setClickable(true);
