@@ -104,10 +104,10 @@
 
 
         <ImageView
-            android:id="@+id/menuButton"
+            android:id="@+id/mapButton"
             android:layout_width="210px"
             android:layout_height="210px"
-            android:background="@drawable/aga_zbee_v2_button_left_menu_off"
+            android:background="@drawable/map_icon"
             android:layout_marginTop="83px"
             android:layout_alignParentRight="true"/>
 
@@ -282,14 +282,6 @@
             android:layout_height="110px"
             android:background="@drawable/aga_zbee_v2_button_connection_off"
             android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true" />
-
-        <ImageView
-            android:id = "@+id/mapButton"
-            android:layout_width="110px"
-            android:layout_height="110px"
-            android:background="@drawable/aga_zbee_v2_button_left_blinker_off"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true" />
 
 

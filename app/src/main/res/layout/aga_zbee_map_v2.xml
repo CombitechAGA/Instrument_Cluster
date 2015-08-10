@@ -111,12 +111,11 @@
 
         <ImageView
             android:id="@+id/backIcon"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
             android:background="@drawable/aga_zbee_v2_button_left_back_off"
             android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="20px"
             />
 
 

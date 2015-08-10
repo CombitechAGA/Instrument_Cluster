@@ -10,6 +10,9 @@ import java.util.ArrayList;
 
 public class Monitor {
 
+    private double homelat;
+    private double homelng;
+
     private final static int SPEED = 1;
     private final static int FUEL = 2;
     private final static int DISTANCE_TRAVELED = 3;
@@ -254,6 +257,23 @@ public class Monitor {
 
     public synchronized void removeReadMessage() {
         readMessages.remove(0);
+    }
+
+
+    public synchronized double getHomelng() {
+        return homelng;
+    }
+
+    public synchronized double getHomelat() {
+        return homelat;
+    }
+
+    public synchronized void setHomelng(double homelng) {
+        this.homelng = homelng;
+    }
+
+    public synchronized void setHomelat(double homelat) {
+        this.homelat = homelat;
     }
 
 //    public synchronized float getDistancePrediction() {

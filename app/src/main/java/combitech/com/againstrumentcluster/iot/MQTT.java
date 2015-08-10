@@ -62,6 +62,8 @@ public class MQTT extends Thread implements CloudPutter {
     private PendingIntent mAlarmIntent;
     private Activity currentActivity = null;
     MqttListener listener = null;
+    private double lat;
+    private double lng;
 
     public MQTT(Monitor monitor, Context context) {
         subscribeTopics = new ArrayList<String>();
@@ -221,7 +223,11 @@ public class MQTT extends Thread implements CloudPutter {
             user = list.get(3);
             pass = list.get(4);
             qos = Integer.parseInt(list.get(5));
-
+            lat = Double.parseDouble(list.get(6).split(",")[0]);
+            lng = Double.parseDouble(list.get(6).split(",")[1]);
+            monitor.setHomelat(lat);
+            monitor.setHomelng(lng);
+            System.out.println("lat: " + lat + " lng: " + lng );
             Log.d(LOG_TAG, "Interval: " + interval);
 
         } catch (Exception e) {

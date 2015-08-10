@@ -3,6 +3,7 @@ package combitech.com.againstrumentcluster;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Location;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
@@ -15,11 +16,14 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.Fragment;
 
 import com.combitech.safe.SAFEClient;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.support.v4.app.FragmentManager;
@@ -809,10 +813,32 @@ public class ActivityLayoutManager_v2 extends RelativeLayout implements OnMapRea
     @Override
     public void onMapReady(GoogleMap googleMap) {
         googleMap.setMyLocationEnabled(true);
-        googleMap.addMarker(new MarkerOptions()
-                .title("Sydney")
-                .snippet("The most populous city in Australia.")
-                .position());
+
+        Location location = googleMap.getMyLocation();
+        MarkerOptions marker = new MarkerOptions()
+                .title("Home sweet home")
+                .position(new LatLng(monitor.getHomelat(), monitor.getHomelng()));
+
+        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.zbee_home_marker));
+        googleMap.addMarker(marker);
+
+        if (location != null) {
+            System.out.println("Location va inte null, men den zoomar inte...");
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
+                            location.getLongitude()),
+                    10));
+        } else {
+            System.out.println("location va null! i onMapReady()");
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(monitor.getHomelat(),
+                            monitor.getHomelng()),
+                    10));
+        }
+
+        googleMap.addCircle(new CircleOptions()
+                .center(new LatLng(monitor.getHomelat(), monitor.getHomelng()))
+                .radius(100)
+                .strokeColor(Color.RED));
+
 
 
     }

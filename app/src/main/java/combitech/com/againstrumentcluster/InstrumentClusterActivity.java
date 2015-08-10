@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -147,9 +148,6 @@ public class InstrumentClusterActivity extends FragmentActivity {
         registerReceiver(networkStateReceiver, intentFilter);
 
     }
-
-
-
 
     @Override
     public void onPause(){
