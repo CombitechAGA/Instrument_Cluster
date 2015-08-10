@@ -836,7 +836,7 @@ public class ActivityLayoutManager_v2 extends RelativeLayout implements OnMapRea
 
         googleMap.addCircle(new CircleOptions()
                 .center(new LatLng(monitor.getHomelat(), monitor.getHomelng()))
-                .radius(100)
+                .radius(6000)
                 .strokeColor(Color.RED));
 
 
