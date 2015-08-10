@@ -51,6 +51,7 @@ public class Monitor {
     private int lastNetworkChange;
     private ArrayList<String> messages = new ArrayList<String>();
     private ArrayList<String> readMessages = new ArrayList<String>();
+    private int zoomLevel;
 
     public Monitor() {
     }
@@ -274,6 +275,13 @@ public class Monitor {
 
     public synchronized void setHomelat(double homelat) {
         this.homelat = homelat;
+    }
+    public synchronized void setZoomLevel(int zoomLevel){
+        this.zoomLevel = zoomLevel;
+    }
+
+    public synchronized int getZoomLevel() {
+        return zoomLevel;
     }
 
 //    public synchronized float getDistancePrediction() {

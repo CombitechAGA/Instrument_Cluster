@@ -812,6 +812,7 @@ public class ActivityLayoutManager_v2 extends RelativeLayout implements OnMapRea
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        int zoomLevel = monitor.getZoomLevel();
         googleMap.setMyLocationEnabled(true);
 
         Location location = googleMap.getMyLocation();
@@ -823,15 +824,15 @@ public class ActivityLayoutManager_v2 extends RelativeLayout implements OnMapRea
         googleMap.addMarker(marker);
 
         if (location != null) {
-            System.out.println("Location va inte null, men den zoomar inte...");
+            System.out.println("Location va inte null");
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
                             location.getLongitude()),
-                    10));
+                    zoomLevel));
         } else {
             System.out.println("location va null! i onMapReady()");
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(monitor.getHomelat(),
                             monitor.getHomelng()),
-                    10));
+                    zoomLevel));
         }
 
         googleMap.addCircle(new CircleOptions()
