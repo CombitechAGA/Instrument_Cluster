@@ -227,6 +227,7 @@ public class MQTT extends Thread implements CloudPutter {
             lng = Double.parseDouble(list.get(6).split(",")[1]);
             monitor.setHomelat(lat);
             monitor.setHomelng(lng);
+            monitor.setZoomLevel(Integer.parseInt(list.get(7)));
             System.out.println("lat: " + lat + " lng: " + lng );
             Log.d(LOG_TAG, "Interval: " + interval);
 
