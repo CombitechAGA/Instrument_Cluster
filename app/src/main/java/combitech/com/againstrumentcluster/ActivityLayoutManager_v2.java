@@ -834,11 +834,14 @@ public class ActivityLayoutManager_v2 extends RelativeLayout implements OnMapRea
                             monitor.getHomelng()),
                     zoomLevel));
         }
-
+        int geofenceDistance = monitor.getGeofenceDistance();
+        System.out.println(geofenceDistance);
+        if(geofenceDistance!=0){
         googleMap.addCircle(new CircleOptions()
                 .center(new LatLng(monitor.getHomelat(), monitor.getHomelng()))
-                .radius(6000)
+                .radius(geofenceDistance)
                 .strokeColor(Color.RED));
+        }
 
 
 

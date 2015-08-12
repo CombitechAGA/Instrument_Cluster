@@ -5,4 +5,7 @@ User#cab
 Pass#sjuttongubbar
 qos#2
 home#55.604096,13.004344
-zoomlevel#10
+zoom#10
+margin#2
+geofence#5000
+simulator#true

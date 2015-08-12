@@ -64,15 +64,16 @@ public class IOTLocationListener implements com.google.android.gms.location.Loca
 
     @Override
     public void onLocationChanged(Location location) {
-
-        if (location != null) {
-            Log.d(LOG_TAG, location.toString());
-            Toast.makeText(mContext, location.toString(), Toast.LENGTH_LONG).show();
-            mMonitor.setLongitude(location.getLongitude());
-            mMonitor.setLatitude(location.getLatitude());
-        } else {
-            Log.d(LOG_TAG, "Location �r null");
-            Toast.makeText(mContext, "Location null", Toast.LENGTH_LONG).show();
+        if(!mMonitor.isSimulator()) {
+            if (location != null) {
+                Log.d(LOG_TAG, location.toString());
+                Toast.makeText(mContext, location.toString(), Toast.LENGTH_LONG).show();
+                mMonitor.setLongitude(location.getLongitude());
+                mMonitor.setLatitude(location.getLatitude());
+            } else {
+                Log.d(LOG_TAG, "Location �r null");
+                Toast.makeText(mContext, "Location null", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -95,17 +96,18 @@ public class IOTLocationListener implements com.google.android.gms.location.Loca
     public void onConnected(Bundle bundle) {
         //        mLocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
 //        Location lastKnownLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        Location lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (lastKnownLocation != null) {
-            System.out.println("Använder GPS");
-            Log.d(LOG_TAG, lastKnownLocation.toString());
-            Toast.makeText(mContext, lastKnownLocation.toString(), Toast.LENGTH_LONG).show();
-            mMonitor.setLongitude(lastKnownLocation.getLongitude());
-            mMonitor.setLatitude(lastKnownLocation.getLatitude());
-        }
-        else{
-            Log.d(LOG_TAG,"Last known locatin is null");
-            Toast.makeText(mContext, "Last known locatin is null", Toast.LENGTH_LONG).show();
+        if(!mMonitor.isSimulator()) {
+            Location lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            if (lastKnownLocation != null) {
+                System.out.println("Använder GPS");
+                Log.d(LOG_TAG, lastKnownLocation.toString());
+                Toast.makeText(mContext, lastKnownLocation.toString(), Toast.LENGTH_LONG).show();
+                mMonitor.setLongitude(lastKnownLocation.getLongitude());
+                mMonitor.setLatitude(lastKnownLocation.getLatitude());
+            } else {
+                Log.d(LOG_TAG, "Last known locatin is null");
+                Toast.makeText(mContext, "Last known locatin is null", Toast.LENGTH_LONG).show();
+            }
         }
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,mLocationRequest, this);
     }

@@ -23,9 +23,11 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import combitech.com.againstrumentcluster.InstrumentClusterActivity;
 import combitech.com.againstrumentcluster.R;
+import combitech.com.againstrumentcluster.iot.LocationInfo;
 import combitech.com.againstrumentcluster.iot.appcore.MyApplication;
 
 /**
@@ -226,8 +228,39 @@ public class MQTT extends Thread implements CloudPutter {
             lat = Double.parseDouble(list.get(6).split(",")[0]);
             lng = Double.parseDouble(list.get(6).split(",")[1]);
             monitor.setHomelat(lat);
+            monitor.setLatitude(lat);
+            monitor.setLongitude(lng);
             monitor.setHomelng(lng);
             monitor.setZoomLevel(Integer.parseInt(list.get(7)));
+            System.out.println(list.get(8));
+            monitor.setGeofenceDistance(Integer.parseInt(list.get(9)));
+
+
+            monitor.setSimulator(Boolean.parseBoolean(list.get(10)));
+            //läs in filen och lägg in i hashmap
+            if(Boolean.parseBoolean(list.get(10))){
+                monitor.setGeofenceDistance(0);
+                //x,y som en sträng för finns ingen par typ i java?
+                HashMap<Integer,LocationInfo> distanceToGPSMap = new HashMap<>();
+                is = context.getResources().openRawResource(R.raw.corkscrew);
+                br = new BufferedReader(new InputStreamReader(is));
+                line = br.readLine();
+                while(line !=null){
+                    System.out.println("line:'"+line+"'");
+                    String []lineParts = line.split("    ");
+                    System.out.println(lineParts[0]);
+                    System.out.println(lineParts[1]);
+                    String[] latLong = lineParts[1].trim().split(", ");
+                    LocationInfo temp = new LocationInfo(Double.parseDouble(latLong[0]),Double.parseDouble(latLong[1]));
+                    distanceToGPSMap.put(Integer.parseInt(lineParts[0])/100,temp);
+                    line = br.readLine();
+                }
+                monitor.setFakeGps(distanceToGPSMap);
+            //lägg in hashmapen i monitorn
+            }
+
+
+
             System.out.println("lat: " + lat + " lng: " + lng );
             Log.d(LOG_TAG, "Interval: " + interval);
 

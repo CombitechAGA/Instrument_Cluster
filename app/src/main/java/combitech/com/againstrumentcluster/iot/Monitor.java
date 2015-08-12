@@ -3,6 +3,7 @@ package combitech.com.againstrumentcluster.iot;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Fredrik on 2015-06-25.
@@ -37,6 +38,7 @@ public class Monitor {
     private boolean distanceTraveledUpdated = false;
 
 
+
     private boolean connectedToCloud=false;
 
 
@@ -52,6 +54,10 @@ public class Monitor {
     private ArrayList<String> messages = new ArrayList<String>();
     private ArrayList<String> readMessages = new ArrayList<String>();
     private int zoomLevel;
+    private int geofenceDistance;
+    private boolean simulator = false;
+    private HashMap<Integer, LocationInfo> fakeGps;
+    private long totalTrackDistance = 3600;
 
     public Monitor() {
     }
@@ -282,6 +288,31 @@ public class Monitor {
 
     public synchronized int getZoomLevel() {
         return zoomLevel;
+    }
+    public synchronized  void setGeofenceDistance(int geofenceDistance){
+        this.geofenceDistance=geofenceDistance;
+    }
+    public synchronized int getGeofenceDistance(){
+        return geofenceDistance;
+    }
+    public synchronized void setSimulator(boolean simulator){
+        this.simulator=simulator;
+    }
+    public synchronized boolean isSimulator(){
+        return simulator;
+    }
+
+    public synchronized void setFakeGps(HashMap<Integer,LocationInfo> fakeGps) {
+        this.fakeGps = fakeGps;
+    }
+
+    public synchronized void updateFakeGps(long distanceTraveled) {
+        int index = (int) (distanceTraveled % totalTrackDistance) / 100;
+        System.out.println("Location index är: " + index);
+        latitude = fakeGps.get(index).getLat();
+        System.out.println(latitude);
+        longitude = fakeGps.get(index).getLng();
+        System.out.println(longitude);
     }
 
 //    public synchronized float getDistancePrediction() {

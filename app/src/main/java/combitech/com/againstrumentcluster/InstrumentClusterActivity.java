@@ -119,6 +119,16 @@ public class InstrumentClusterActivity extends FragmentActivity {
                         }
                     });
                     mMonitor.updatedistanceTraveled(data.getLongValue());
+                    if(mMonitor.isSimulator()){
+                        //hantera uppdatering av gps
+                        //ha en hashmap med nyckel distans och värde gps? och hämta ut nyckeln som är närmst?
+                        //Dvs loopa igenom alla nycklarna varje gång det kommer en uppdatering här och välj den nyckeln som är närmast (Och sen då välja den gps:en och uppdatera gpsen)
+                        //borde finnas ett bättre sätt
+                        //men gör det i metoden här
+                        mMonitor.updateFakeGps(data.getLongValue());
+
+                    }
+
                     //cloudPutter.publishDistanceTraveled(data.getLongValue());
                 }
 
