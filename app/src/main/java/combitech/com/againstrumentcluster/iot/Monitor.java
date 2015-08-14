@@ -58,6 +58,7 @@ public class Monitor {
     private boolean simulator = false;
     private HashMap<Integer, LocationInfo> fakeGps;
     private long totalTrackDistance = 3600;
+    private String zbeeName;
 
     public Monitor() {
     }
@@ -313,6 +314,14 @@ public class Monitor {
         System.out.println(latitude);
         longitude = fakeGps.get(index).getLng();
         System.out.println(longitude);
+    }
+
+    public synchronized void setZbeeName(String name) {
+        this.zbeeName = name;
+    }
+
+    public synchronized String getZbeeName() {
+        return zbeeName;
     }
 
 //    public synchronized float getDistancePrediction() {

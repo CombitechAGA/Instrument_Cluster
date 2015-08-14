@@ -23,7 +23,7 @@ public class IOTAlarmBroadcastReceiver extends BroadcastReceiver {
         MQTT mqtt = app.getMQTT();
         Monitor monitor = app.getMonitor();
         Database db = mqtt.getDatabase();
-        CarSnapShot snapShot = new CarSnapShot(mqtt.getClientID(),System.currentTimeMillis(),monitor.getFuel(),monitor.getSpeed(),monitor.getDistanceTraveled(),monitor.getLongitude(),monitor.getLatitude());
+        CarSnapShot snapShot = new CarSnapShot(mqtt.getClientID(),System.currentTimeMillis(),monitor.getFuel(),monitor.getSpeed(),monitor.getDistanceTraveled(),monitor.getLongitude(),monitor.getLatitude(),monitor.getZbeeName());
         new WriteToDatabase(db).execute(snapShot);
         Intent mqttIntervalServiceIntent = new Intent(MQTTIntervalService.ACTION_SYNC,null,context,MQTTIntervalService.class);
         context.startService(mqttIntervalServiceIntent);

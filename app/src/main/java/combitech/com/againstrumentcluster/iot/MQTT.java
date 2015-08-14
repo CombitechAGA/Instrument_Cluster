@@ -237,6 +237,9 @@ public class MQTT extends Thread implements CloudPutter {
 
 
             monitor.setSimulator(Boolean.parseBoolean(list.get(10)));
+
+            monitor.setZbeeName(list.get(11));
+
             //läs in filen och lägg in i hashmap
             if(Boolean.parseBoolean(list.get(10))){
                 monitor.setGeofenceDistance(0);
