@@ -849,7 +849,7 @@ public class ActivityLayoutManager_v2 extends RelativeLayout implements OnMapRea
                     .title("Mission")
                     .position(new LatLng(missionLoc.getLat(), missionLoc.getLng()));
 
-            missionMarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.zbee_home_marker));
+            missionMarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.mission_marker));
             googleMap.addMarker(missionMarker);
         }
 
