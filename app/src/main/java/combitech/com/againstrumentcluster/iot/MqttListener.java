@@ -26,41 +26,64 @@ import combitech.com.againstrumentcluster.iot.appcore.MyApplication;
 public class MqttListener implements MqttCallback {
     private Monitor monitor;
     private String LOG_TAG = MqttListener.class.getSimpleName();
-    private boolean connectionLost=false;
+    private boolean connectionLost = false;
     private Activity registeredActivity = null;
 
-    public MqttListener(Monitor monitor){
+    public MqttListener(Monitor monitor) {
         this.monitor = monitor;
     }
 
 
-    public void registerActivity(Activity registeredActivity){
-        this.registeredActivity=registeredActivity;
+    public void registerActivity(Activity registeredActivity) {
+        this.registeredActivity = registeredActivity;
     }
-    public void unregisterActivity(){
-        registeredActivity=null;
+
+    public void unregisterActivity() {
+        registeredActivity = null;
     }
 
     @Override
     public void connectionLost(Throwable throwable) {
-        connectionLost=true;
-        Log.d(LOG_TAG,"Tappade min connection fyfan");
+        connectionLost = true;
+        Log.d(LOG_TAG, "Tappade min connection fyfan");
     }
 
     @Override
     public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
-    //    System.out.println("is duplicate:"+mqttMessage.isDuplicate());
+        //    System.out.println("is duplicate:"+mqttMessage.isDuplicate());
         System.out.println("QOS: " + mqttMessage.getQos());
-        if (connectionLost){
+        if (connectionLost) {
             Log.d(LOG_TAG, "Getting messages after losing the connection");
         }
 
-        Log.d(LOG_TAG,"topic:"+topic+" message: "+mqttMessage.toString());
+        Log.d(LOG_TAG, "topic:" + topic + " message: " + mqttMessage.toString());
 
         if (topic.contains("message")) {
-            monitor.addMessage(mqttMessage.toString());
-        }
-        else if(topic.contains("config")){
+
+            String[] splittedMessage = mqttMessage.toString().split(";");
+
+            if (splittedMessage[0].equals("mission")) {
+                String locString = mqttMessage.toString().split("location:")[1].split(";")[0];
+                double lat = Double.parseDouble(locString.split(",")[0]);
+                double lng = Double.parseDouble(locString.split(",")[1]);
+                System.out.println("lat: " + lat);
+                System.out.println("lng:" + lng);
+                LocationInfo loc = new LocationInfo(lat, lng);
+                String msg = mqttMessage.toString().split("messageText:")[1];
+                monitor.addMessage(msg);
+                monitor.setMission(true);
+                monitor.setMissionPosition(loc);
+
+
+            } else {
+                //message;blablabalbalba
+                String msg = mqttMessage.toString().split("messageText:")[1];
+                System.out.println(msg);
+                monitor.addMessage(msg);
+            }
+
+
+        } else if (topic.contains("config")) {
 
             File file = new File(MyApplication.getAppContext().getFilesDir(), "config.txt");
             BufferedWriter bWriter = new BufferedWriter(new FileWriter(file));
@@ -69,10 +92,9 @@ public class MqttListener implements MqttCallback {
             bWriter.close();
 
             Log.d(LOG_TAG, mqttMessage.toString());
-        }
-        else {
+        } else {
 
-            if(registeredActivity!=null) {
+            if (registeredActivity != null) {
                 ActivityLayoutManager_v2 layout = ((InstrumentClusterActivity) registeredActivity).getLayoutManager();
                 float distancePrediction = Float.parseFloat(mqttMessage.toString()) / 100.0f;
                 layout.lastRange = distancePrediction;
@@ -80,7 +102,7 @@ public class MqttListener implements MqttCallback {
             }
         }
         //if(registerActivity;)
-       // registeredActivity
+        // registeredActivity
     }
 
     @Override

@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import combitech.com.againstrumentcluster.iot.LocationInfo;
 import combitech.com.againstrumentcluster.iot.Monitor;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
@@ -841,6 +842,15 @@ public class ActivityLayoutManager_v2 extends RelativeLayout implements OnMapRea
                 .center(new LatLng(monitor.getHomelat(), monitor.getHomelng()))
                 .radius(geofenceDistance)
                 .strokeColor(Color.RED));
+        }
+        if(monitor.haveMission()){
+            LocationInfo missionLoc = monitor.getMissionPosition();
+            MarkerOptions missionMarker = new MarkerOptions()
+                    .title("Mission")
+                    .position(new LatLng(missionLoc.getLat(), missionLoc.getLng()));
+
+            missionMarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.zbee_home_marker));
+            googleMap.addMarker(missionMarker);
         }
 
 

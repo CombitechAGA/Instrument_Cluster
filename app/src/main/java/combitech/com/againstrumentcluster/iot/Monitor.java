@@ -59,6 +59,8 @@ public class Monitor {
     private HashMap<Integer, LocationInfo> fakeGps;
     private long totalTrackDistance = 3600;
     private String zbeeName;
+    private boolean mission;
+    private LocationInfo missionLoc;
 
     public Monitor() {
     }
@@ -322,6 +324,21 @@ public class Monitor {
 
     public synchronized String getZbeeName() {
         return zbeeName;
+    }
+
+    public synchronized void setMission(boolean mission) {
+        this.mission = mission;
+    }
+
+    public void setMissionPosition(LocationInfo missionPosition) {
+        this.missionLoc = missionPosition;
+    }
+
+    public synchronized LocationInfo getMissionPosition(){
+        return missionLoc;
+    }
+    public synchronized boolean haveMission() {
+        return mission;
     }
 
 //    public synchronized float getDistancePrediction() {
