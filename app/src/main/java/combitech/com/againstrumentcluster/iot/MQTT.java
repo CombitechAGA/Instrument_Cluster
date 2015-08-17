@@ -236,7 +236,7 @@ public class MQTT extends Thread implements CloudPutter {
             monitor.setGeofenceDistance(Integer.parseInt(list.get(9)));
             System.out.println("GeofenceDistance: " + list.get(9));
 
-            System.out.println("geo dist efter: " +monitor.getGeofenceDistance());
+            System.out.println("geo dist efter: " + monitor.getGeofenceDistance());
             monitor.setSimulator(Boolean.parseBoolean(list.get(10)));
 
             monitor.setZbeeName(list.get(11));
@@ -296,7 +296,7 @@ public class MQTT extends Thread implements CloudPutter {
     @Override
     public boolean publishSpeed(float speed) {
         String topic = "telemetry/speed";
-        String message = clientID+";" + speed;
+        String message = clientID+";"+System.currentTimeMillis()+";" + speed;
         try {
             client.publish(topic, message.getBytes(), 0, false);
         } catch (Exception e) {
@@ -310,7 +310,7 @@ public class MQTT extends Thread implements CloudPutter {
     @Override
     public boolean publishBatteryLevel(float percent) {
         String topic = "telemetry/fuel";
-        String message = clientID+";" + percent;
+        String message = clientID+";" + System.currentTimeMillis()+";" +percent;
         try {
             client.publish(topic, message.getBytes(), 0, false);
         } catch (Exception e) {
@@ -338,7 +338,7 @@ public class MQTT extends Thread implements CloudPutter {
     @Override
     public boolean publishDistanceTraveled(long distance) {
         String topic = "telemetry/distanceTraveled";
-        String message = clientID+";" + distance;
+        String message = clientID+";" +System.currentTimeMillis()+";" + distance;
         try {
             client.publish(topic, message.getBytes(), 0, false);
         } catch (Exception e) {
