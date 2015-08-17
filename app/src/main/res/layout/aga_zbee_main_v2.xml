@@ -246,7 +246,11 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="880px"/>
 
-            <ImageView
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></RelativeLayout>
+
+        <ImageView
                 android:id="@+id/batteryBackgroundFull"
                 android:layout_width="162px"
                 android:layout_height="78px"

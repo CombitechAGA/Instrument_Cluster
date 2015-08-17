@@ -694,7 +694,7 @@ public class ActivityLayoutManager_v2 extends RelativeLayout implements OnMapRea
 
 
     public void updateOdometer() {
-        long odo = vehicleDataModel.getOdometer() / 256;
+        long odo = vehicleDataModel.getOdometer() / 1000;
         odometer.setText(String.valueOf(odo) + " km");
     }
 

@@ -234,8 +234,9 @@ public class MQTT extends Thread implements CloudPutter {
             monitor.setZoomLevel(Integer.parseInt(list.get(7)));
             System.out.println(list.get(8));
             monitor.setGeofenceDistance(Integer.parseInt(list.get(9)));
+            System.out.println("GeofenceDistance: " + list.get(9));
 
-
+            System.out.println("geo dist efter: " +monitor.getGeofenceDistance());
             monitor.setSimulator(Boolean.parseBoolean(list.get(10)));
 
             monitor.setZbeeName(list.get(11));
