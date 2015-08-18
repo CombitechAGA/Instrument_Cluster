@@ -316,6 +316,11 @@ public class Monitor {
         System.out.println(latitude);
         longitude = fakeGps.get(index).getLng();
         System.out.println(longitude);
+
+        //uppdatera också på kartan om den inte är uppe
+
+
+
     }
 
     public synchronized void setZbeeName(String name) {

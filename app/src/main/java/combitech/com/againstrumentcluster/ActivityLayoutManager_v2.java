@@ -95,10 +95,12 @@ public class ActivityLayoutManager_v2 extends RelativeLayout implements OnMapRea
     private Monitor monitor;
     public float lastRange;
     private String LOG_TAG = ActivityLayoutManager_v2.class.getSimpleName();
+    private GoogleMap myGoogleMap = null;
 
 
     public ActivityLayoutManager_v2(final InstrumentClusterActivity activity, final VehicleDataModel vehicleDataModel, final SAFEDataModel safeDataModel, final SAFEClient safeClient, final Monitor monitor) {
         super(activity);
+        myGoogleMap=null;
         this.activity = activity;
         this.vehicleDataModel = vehicleDataModel;
         this.safeDataModel = safeDataModel;
@@ -198,7 +200,7 @@ public class ActivityLayoutManager_v2 extends RelativeLayout implements OnMapRea
     }
 
     public void setupViewNormal() {
-
+        myGoogleMap=null;
         System.out.println("Nu visar jag normala vyn");
         activity.setContentView(R.layout.aga_zbee_main_v2);
         isMessageView = false;
@@ -271,10 +273,11 @@ public class ActivityLayoutManager_v2 extends RelativeLayout implements OnMapRea
     }
 
     public void setupMapView() {
-
+        myGoogleMap=null;
         activity.setContentView(R.layout.aga_zbee_map_v2);
-        GoogleMap googleMap;
+        //GoogleMap googleMap;
 //        fragment = ((MapFragment) activity.getFragmentManager().findFragmentById(R.id.map));
+        System.out.println("nu hämtas kartan i setupmap");
         fragment = SupportMapFragment.newInstance();
         FragmentManager     fm = activity.getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
@@ -341,6 +344,7 @@ public class ActivityLayoutManager_v2 extends RelativeLayout implements OnMapRea
     }
 
     public void setupViewMessage() {
+        myGoogleMap=null;
         isMessageView = true;
         activity.setContentView(R.layout.aga_zbee_message_v2);
         batteryPercentage = (TextView) activity.findViewById(R.id.percentageBattery);
@@ -813,47 +817,125 @@ public class ActivityLayoutManager_v2 extends RelativeLayout implements OnMapRea
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        int zoomLevel = monitor.getZoomLevel();
-        googleMap.setMyLocationEnabled(true);
-
-        Location location = googleMap.getMyLocation();
-        MarkerOptions marker = new MarkerOptions()
-                .title("Home sweet home")
-                .position(new LatLng(monitor.getHomelat(), monitor.getHomelng()));
-
-        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.zbee_home_marker));
-        googleMap.addMarker(marker);
-
-        if (location != null) {
-            System.out.println("Location va inte null");
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
-                            location.getLongitude()),
-                    zoomLevel));
-        } else {
-            System.out.println("location va null! i onMapReady()");
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(monitor.getHomelat(),
-                            monitor.getHomelng()),
-                    zoomLevel));
-        }
-        int geofenceDistance = monitor.getGeofenceDistance();
-        System.out.println(geofenceDistance);
-        if(geofenceDistance!=0){
-        googleMap.addCircle(new CircleOptions()
-                .center(new LatLng(monitor.getHomelat(), monitor.getHomelng()))
-                .radius(geofenceDistance)
-                .strokeColor(Color.RED));
-        }
-        if(monitor.haveMission()){
-            LocationInfo missionLoc = monitor.getMissionPosition();
-            MarkerOptions missionMarker = new MarkerOptions()
-                    .title("Mission")
-                    .position(new LatLng(missionLoc.getLat(), missionLoc.getLng()));
-
-            missionMarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.mission_marker));
-            googleMap.addMarker(missionMarker);
-        }
+        //if (monitor.isSimulator()){
+            System.out.println("simulator time!!");
+        //}
+        //else {
 
 
+
+            this.myGoogleMap=googleMap;
+            int zoomLevel = monitor.getZoomLevel();
+            Location location = null;
+            if(!monitor.isSimulator()) {
+                myGoogleMap.setMyLocationEnabled(true);
+                location = myGoogleMap.getMyLocation();
+            }
+
+            MarkerOptions marker = new MarkerOptions()
+                    .title("Home sweet home")
+                    .position(new LatLng(monitor.getHomelat(), monitor.getHomelng()));
+
+            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.zbee_home_marker));
+        myGoogleMap.addMarker(marker);
+
+            if (location != null) {
+                System.out.println("Location va inte null");
+                myGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
+                                location.getLongitude()),
+                        zoomLevel));
+            } else {
+                System.out.println("location va null! i onMapReady()");
+                myGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(monitor.getHomelat(),
+                                monitor.getHomelng()),
+                        zoomLevel));
+            }
+            int geofenceDistance = monitor.getGeofenceDistance();
+            System.out.println(geofenceDistance);
+            if(geofenceDistance!=0){
+                myGoogleMap.addCircle(new CircleOptions()
+                        .center(new LatLng(monitor.getHomelat(), monitor.getHomelng()))
+                        .radius(geofenceDistance)
+                        .strokeColor(Color.RED));
+            }
+            if(monitor.haveMission()){
+                LocationInfo missionLoc = monitor.getMissionPosition();
+                MarkerOptions missionMarker = new MarkerOptions()
+                        .title("Mission")
+                        .position(new LatLng(missionLoc.getLat(), missionLoc.getLng()));
+
+                missionMarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.mission_marker));
+                myGoogleMap.addMarker(missionMarker);
+            }
+        //}
+
+
+
+    }
+
+    public void setFakeGPSOnGui(double latitude, double longitude) {
+
+        final double latlat = latitude;
+        final double longlong =longitude;
+
+//        System.out.println("nu hämtas kartan i setFakeGPS");
+//        activity.setContentView(R.layout.aga_zbee_map_v2);
+//        fragment = SupportMapFragment.newInstance();
+//        FragmentManager     fm = activity.getSupportFragmentManager();
+//        FragmentTransaction ft = fm.beginTransaction();
+//        ft.replace(R.id.map, fragment);
+//        ft.commit();
+//        fragment.getMapAsync(this);
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (myGoogleMap != null) {
+                    System.out.println("maps är ej null!");
+                    //egentligen vill vi ta bort nuvarande markören bara, vi borde kunna spara en referens till den
+
+                    myGoogleMap.clear();
+                    System.out.println("nu är googlemaps ren!");
+                    if (monitor.haveMission()) {
+                        LocationInfo missionLoc = monitor.getMissionPosition();
+                        MarkerOptions missionMarker = new MarkerOptions()
+                                .title("Mission")
+                                .position(new LatLng(missionLoc.getLat(), missionLoc.getLng()));
+                        System.out.println("innan mission marker");
+                        missionMarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.mission_marker));
+                        myGoogleMap.addMarker(missionMarker);
+                        System.out.println("efter mission marker");
+                    }
+                    int geofenceDistance = monitor.getGeofenceDistance();
+                    System.out.println(geofenceDistance);
+                    if (geofenceDistance != 0) {
+                        System.out.println("innan geo");
+                        myGoogleMap.addCircle(new CircleOptions()
+                                .center(new LatLng(monitor.getHomelat(), monitor.getHomelng()))
+                                .radius(geofenceDistance)
+                                .strokeColor(Color.RED));
+                        System.out.println("efter geo");
+                    }
+                    MarkerOptions marker = new MarkerOptions()
+                            .title("Home sweet home")
+                            .position(new LatLng(monitor.getHomelat(), monitor.getHomelng()));
+                    System.out.println("innan home marker");
+                    marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.zbee_home_marker));
+                    myGoogleMap.addMarker(marker);
+                    System.out.println("innan home marker");
+
+
+                    System.out.println("innan simulator marker");
+                    MarkerOptions missionMarker = new MarkerOptions()
+                            .title("Position")
+                            .position(new LatLng(latlat, longlong));
+                    System.out.println("efter simulator marker");
+                    missionMarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.mission_marker));
+                    myGoogleMap.addMarker(missionMarker);
+                    System.out.println("added marker to map");
+                }
+                System.out.println("maps va null?");
+            }
+        });
 
     }
 }

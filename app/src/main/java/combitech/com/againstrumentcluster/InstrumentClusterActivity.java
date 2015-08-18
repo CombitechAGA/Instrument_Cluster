@@ -125,7 +125,9 @@ public class InstrumentClusterActivity extends FragmentActivity {
                         //Dvs loopa igenom alla nycklarna varje gång det kommer en uppdatering här och välj den nyckeln som är närmast (Och sen då välja den gps:en och uppdatera gpsen)
                         //borde finnas ett bättre sätt
                         //men gör det i metoden här
+                        System.out.println("avstånd kört: "+data.getLongValue());
                         mMonitor.updateFakeGps(data.getLongValue());
+                        layoutManager.setFakeGPSOnGui(mMonitor.getLatitude(),mMonitor.getLongitude());
 
                     }
 

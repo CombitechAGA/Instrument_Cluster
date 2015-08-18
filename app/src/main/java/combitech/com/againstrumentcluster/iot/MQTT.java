@@ -243,7 +243,7 @@ public class MQTT extends Thread implements CloudPutter {
 
             //läs in filen och lägg in i hashmap
             if(Boolean.parseBoolean(list.get(10))){
-                monitor.setGeofenceDistance(0);
+                //monitor.setGeofenceDistance(0);
                 //x,y som en sträng för finns ingen par typ i java?
                 HashMap<Integer,LocationInfo> distanceToGPSMap = new HashMap<>();
                 is = context.getResources().openRawResource(R.raw.corkscrew);
