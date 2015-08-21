@@ -12,13 +12,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.Fragment;
-
 import com.combitech.safe.SAFEClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -929,7 +925,7 @@ public class ActivityLayoutManager_v2 extends RelativeLayout implements OnMapRea
                             .title("Position")
                             .position(new LatLng(latlat, longlong));
                     System.out.println("efter simulator marker");
-                    missionMarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.mission_marker));
+                    missionMarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.zbee_marker));
                     myGoogleMap.addMarker(missionMarker);
                     System.out.println("added marker to map");
                 }
